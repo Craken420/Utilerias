@@ -1,13 +1,13 @@
 const jsonRegEx = {
-  ampersand:   /\&/g,
-  comentarios: /^;.*/gm,
-  campoConsecutivo:     /^\w+\d{3}/m,
-  componentesIntelisis: /\[.*?.*?[^]*?(?=\[)/g,
-  campoYcontinua:       /^.*?\=<CONTINUA>|<CONTINUA>/gm,
-  continuaAlInicio:     /(?<=^.*?\=)<CONTINUA>/m,
-  continuaFinal:        /(?<=.*?)\<CONTINUA\>(\s+|)$/,
-  nombreArchivoEnRuta:  /.*\\|.*\//,
-  saltoLineaVacio:      /^\n[\s\t]*/gm,
+  ampersand:   /\&/g,   //=> &
+  comentarios: /^;.*/gm, //=> ;Comentario
+  campoConsecutivo:     /^\w+\d{3}/m, //=> Campo002, SQL002
+  componentesIntelisis: /\[.*?.*?[^]*?(?=\[)/g, //=> [Componente] contenidoComponente [
+  campoYcontinua:       /^.*?\=<CONTINUA>|<CONTINUA>/gm, //=> SQL002 = <CONTINUA> algo <CONTINUA>
+  continuaAlInicio:     /(?<=^.*?\=)<CONTINUA>/m, //=> SQL002= <CONTINUA> Algo
+  continuaFinal:        /(?<=.*?)\<CONTINUA\>(\s+|)$/, //=> SQL= Algo <CONTINUA>
+  nombreArchivoEnRuta:  /.*\\|.*\//, //=> Busca 'c:/user/documents/ ' hasta 'Nombre Archivo.txt'
+  saltoLineaVacio:      /^\n[\s\t]*/gm, //=> \n\s\t Lineas vacias espacios y tabulador
   
 
 }
