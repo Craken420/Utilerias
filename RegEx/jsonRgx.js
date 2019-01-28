@@ -49,6 +49,6 @@ exports.jsonReplace = {
     texto = texto.replace(/\./g,   '\\.')
     return texto
   },
-  saltoLineaPorComaEspacio:    texto => { return texto.replace(jsonRegEx.saltoLinea, ', ')}
+  saltoLineaPorComaEspacio:  texto => { return texto.replace(jsonRegEx.saltoLinea, ', ')}
   
 }
