@@ -1,14 +1,15 @@
 const jsonRegEx = {
-  comentarios: /\;.*/g, 
   ampersand:   /\&/g,
-  nombreArchivoEnRuta:  /.*\\|.*\//,
-  saltoLineaVacio:      /^\n[\s\t]*/gm,
+  comentarios: /^;.*/gm,
+  campoConsecutivo:     /^\w+\d{3}/m,
+  componentesIntelisis: /\[.*?.*?[^]*?(?=\[)/g,
+  campoYcontinua:       /^.*?\=<CONTINUA>|<CONTINUA>/gm,
   continuaAlInicio:     /(?<=^.*?\=)<CONTINUA>/m,
   continuaFinal:        /(?<=.*?)\<CONTINUA\>(\s+|)$/,
-  campoYcontinua:       /^.*?\=<CONTINUA>|<CONTINUA>/gm,
-  componentesIntelisis: /\[.*?.*?[^]*?(?=\[)/g,
-  campoConsecutivo:     /^\w+\d{3}/m,
+  nombreArchivoEnRuta:  /.*\\|.*\//,
+  saltoLineaVacio:      /^\n[\s\t]*/gm,
   
+
 }
 
 exports.expresiones = jsonRegEx
@@ -17,18 +18,17 @@ exports.crearRegEx = {
   campoSinDigito:     tipoCampo => { return  new RegExp(`^${tipoCampo}\\=.*`, `gim`)},
   campoConDigito:     tipoCampo => { return  new RegExp(`^${tipoCampo}\\d{3}\\=.*`, `gim`)},
   campoConSinDigito:  tipoCampo => { return  new RegExp(`^${tipoCampo}(\\d{3}|)\\=.*`, `gim`)}
-  
+ // return new RegExp(`${regEx}`, `gim`)
 }
 
 exports.jsonReplace = {
-  clsComentarios:       texto => { return texto.replace(jsonRegEx.comentarios, '')},
-  clsRuta:              ruta  => { return ruta.replace(jsonRegEx.nombreArchivoEnRuta, '')},
-  clsSaltoLineaVacio:   texto => { return texto.replace(jsonRegEx.saltoLineaVacio, '') },
-  clsCampoYContinua:    texto => { return texto.replace(jsonRegEx.campoYcontinua, '')},
-  dosPuntosPorIgual:    texto => { return texto.replace(/=/g, ':')},
-  saltoLineaPorComa:    texto => { return texto.replace(jsonRegEx.saltoLinea, ', ')},
-  addEspacioComponente: texto => { return texto.replace(/^\[/gm, ' \n[')},
-  prepararRegEx:        texto => {
+  addEspacioComponente:    texto => { return texto.replace(/^\[/gm, ' \n[')},
+  clsCampoYContinua:       texto => { return texto.replace(jsonRegEx.campoYcontinua, '')},
+  clsComentariosIntelisis: texto => { return texto.replace(jsonRegEx.comentarios, '')},
+  clsRuta:            ruta  => { return ruta.replace(jsonRegEx.nombreArchivoEnRuta, '')},
+  clsSaltoLineaVacio: texto => { return texto.replace(jsonRegEx.saltoLineaVacio, '') },
+  dosPuntosPorIgual:  texto => { return texto.replace(/=/g, ':')},
+  prepararRegEx:      texto => {
     texto = texto.replace(/\[/g, '\\[').replace(/\]/g, '\\]')
     texto = texto.replace(/\(/g, '\\(').replace(/\)/g, '\\)')
     texto = texto.replace(/\{/g, '\\{').replace(/\}/g, '\\}')
@@ -41,5 +41,7 @@ exports.jsonReplace = {
     texto = texto.replace(/\$/g, '\\$')
     texto = texto.replace(/\./g, '\\.')
     return texto
-  }
+  },
+  saltoLineaPorComa:    texto => { return texto.replace(jsonRegEx.saltoLinea, ', ')}
+  
 }
