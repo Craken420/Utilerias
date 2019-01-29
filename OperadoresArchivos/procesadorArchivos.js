@@ -1,12 +1,16 @@
 const fs = require('fs')
 
+exports.agregarArchivo = (archivo, texto) => {
+    fs.appendFileSync(archivo, texto, {flag:'as'})
+}
+
 /*** Crea un arhivo de forma sincrona ***/
-exports.crearArchivo = function (archivo, texto) {
+exports.crearArchivo = (archivo, texto) => {
     fs.writeFileSync(archivo, texto)
 }
 
 /*** Lee un archivo de forma sincrona */
-exports.leerArchivo = function (archivo) {
+exports.leerArchivo = (archivo) => {
     return fs.readFileSync(archivo)
 }
 

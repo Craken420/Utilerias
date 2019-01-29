@@ -23,7 +23,7 @@ exports.obtenerArchivos = async function (carpeta) {
 }
 
 /* Uso:
- * getFiles(carpetas)
+ * obtenerArchivos(carpetas)
  *     .then(archivos => { console.log(archivos) })
  *     .catch(e => console.error(e))
  */
