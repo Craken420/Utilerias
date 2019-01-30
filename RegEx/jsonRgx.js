@@ -23,7 +23,7 @@ const jsonRegEx = {
   nomExtCmp:   /(?<=\[).*?\.(frm|vis|tbl|dlg|rep)/gi, //=> Si ^[ extrae Componente.frm
   nomYtipoEsp: /.*(\/|\\)|\_MAVI.*|\.esp/gi, //De: \File_FRM_MAVI.esp Busca File_FRM
   //parentesisAnidados: /(\((?>[^()]+|(?1))*\))/gm,
-  puntoExtension:   /(?<=\.)\w+$/gim, //=> De: Achivo.FRM Busca .FRM
+  puntoExtension:   /\.(?=\w+$)/gim, //=> De: Achivo.FRM Busca .FRM
   saltoLineaVacio:  /^\n[\s\t]*/gm, //=> \n\s\t Lineas vacias espacios y tabulador
   tituloComponente: /^\[.*\]/gm,
   tipoEspEnNomenclatura: /(?<=\_)\w+(?=\_)/gi //=> _FRM_
@@ -48,7 +48,9 @@ const rgxCrear = {
 const rgxReplace = {
   addEspacioCmp: texto => { return texto.replace(/^\[/gm, ' \n[')},
   crearNomenclaturaEsp: texto =>  { return texto.replace(
-                                    jsonRegEx.guionBajoTipoEsp, '_')
+                                                  regEx.expresiones.puntoExtension,
+                                                  '_'
+                                                )
                                   },
   clsCampoIntlsYContinua: campoIntls => { return campoIntls.replace(
                                               jsonRegEx.campoIntlsYcontinua,
@@ -105,11 +107,6 @@ const rgxReplace = {
                                                       ', '
                                               )
                                      },
-  tipoEspAMayusculas: texto => { return texto.replace(
-                                          jsonRegEx.tipoEspEnNomenclatura,
-                                          texto => texto.toUpperCase()
-                                        )
-                               }
 }
 
 module.exports.expresiones = jsonRegEx

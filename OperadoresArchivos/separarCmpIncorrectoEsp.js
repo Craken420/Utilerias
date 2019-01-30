@@ -31,12 +31,13 @@ const eliminarArchivoVacioYCmpIncorrecto = (archivo, expresion, texto) => {
  * Ejemplo: recive Archivo.frm y retorna en Archivo_FRM_MAVI.esp
  * @arreglo Contiene los nombres que seran transformados
  ***/
-const crearNombreNomenclaturaArchivoEsp = (arreglo) => {
-    return arreglo.map(
-        x => {
-            x = regEx.jsonReplace.crearNomenclaturaEsp(x) + '_MAVI.esp'
-            
-            x = regEx.jsonReplace.tipoEspAMayusculas(x)
+const crearNombreNomenclaturaArchivoEsp = arreglo => {
+    return arreglo.map(x => {
+            x = x.replace(regEx.expresiones.puntoExtension, '_') + '_MAVI.esp'
+            x = x.replace(
+                regEx.expresiones.tipoEspEnNomenclatura,
+                x => x.toUpperCase()
+            )
             return x
         }
     )
@@ -71,11 +72,11 @@ const crearArchivoOAgregarCmp = (expresion, texto) => {
                                             regEx.expresiones.nomExtCmp
                                         )
                                     )
-
+        console.log(arrNomExtCmpSinDuplx)
         let nombresArchivos  =  crearNombreNomenclaturaArchivoEsp(
                                     arrNomExtCmpSinDuplx
                                 )
-
+        console.log(nombresArchivos)
         for (nomExtCmp in arrNomExtCmpSinDuplx) {
 
             let txtFinal =  txtCmpDiffNomArchivo.match(
