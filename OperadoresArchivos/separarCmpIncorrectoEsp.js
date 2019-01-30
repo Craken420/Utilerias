@@ -18,7 +18,7 @@ const regEx       = require('../RegEx/jsonRgx')
  ***/
 const eliminarArchivoVacioYCmpIncorrecto = (archivo, expresion, texto) => {
     texto = texto.replace(expresion, '')
-    texto = texto.replace(/\[(?!(\s+|)\w)/gi, '')
+    texto = clsIniCorcheteVacio(texto)
     if(!/\w+/g.test(regEx.jsonReplace.clsComentariosIntls(texto))) {
         eliminarArchivo.eliminarArchivoVacio(texto, archivo)
     }
@@ -34,8 +34,9 @@ const eliminarArchivoVacioYCmpIncorrecto = (archivo, expresion, texto) => {
 const crearNombreNomenclaturaArchivoEsp = (arreglo) => {
     return arreglo.map(
         x => {
-            x = x.replace(/\.(?=(frm|vis|tbl|dlg|rep))/gi, '_') + '_MAVI.esp'
-            x = x.replace(/(?<=\_)\w+(?=\_)/gi, x => x.toUpperCase())
+            x = regEx.jsonReplace.crearNomenclaturaEsp(x) + '_MAVI.esp'
+            
+            x = regEx.jsonReplace.tipoEspAMayusculas(x)
             return x
         }
     )
@@ -100,7 +101,9 @@ const crearArchivoOAgregarCmp = (expresion, texto) => {
  * @texto   contenido del archivo
  ***/
 exports.crearArchivoCmpAddCmpArchivo = (archivo, texto) => {
-    eliminarArchivo.eliminarArchivoVacio (texto, archivo)
+
+    eliminarArchivo.eliminarArchivoVacio(texto, archivo)
+
     texto = texto + '\n['
     let textoBorrar = texto
     texto = regEx.jsonReplace.clsComentariosIntls(texto)

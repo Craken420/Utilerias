@@ -10,7 +10,7 @@ const iconvlite = require('iconv-lite')
  * @archivo variable que alamacena la ruta del archivo
  * @codificacionFinal Codificación deseada
  ***/
-exports.recodificarArchivo = function (archivo, codificacionFinal) {
+exports.recodificarArchivo = (archivo, codificacionFinal) => {
     return iconvlite.decode(fs.readFileSync(archivo), codificacionFinal)
 }
 
@@ -18,6 +18,6 @@ exports.recodificarArchivo = function (archivo, codificacionFinal) {
  * Detecta la codificación del archivo parámetro
  * @archivo variable que alamacena la ruta del archivo
  ***/
-exports.detectarCodificacion = function (archivo) {
+exports.detectarCodificacion = archivo => {
     return chardet.detectFileSync(archivo)
 }

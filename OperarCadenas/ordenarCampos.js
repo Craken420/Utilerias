@@ -11,30 +11,20 @@ const regEx = require('../RegEx/jsonRgx')
  * @campoSinDigito extrae el campo sin digito
  * @campoConDigito extrae los campos sin digito
  ***/
-function ordenar (texto, contenidoCamposConSinDigito, campoSinDigito, campoConDigito) {
-    // console.log('existeCampoConDigitos',existeCampoConDigitos)
-    // console.log('contenidoCamposConSinDigito',contenidoCamposConSinDigito)
-    // console.log('Existen campos con digitos en la ordenacion')
-    let campoConDigitos = contenidoCamposConSinDigito.match(campoConDigito).join('\n')
-    //console.log('campoConDigitos\n',campoConDigitos)
+const ordenar = (texto, contenidoCamposConSinDigito,
+                 campoSinDigito, campoConDigito) => {
 
-    let arregloCampoConDigitos = campoConDigitos.split('\n')
-    //console.log(arregloCampoConDigitos)
-    let cadenaCampoConDigitos = arregloCampoConDigitos.sort().join('\n')
-    //console.log('cadenaCampoConDigitos\n',cadenaCampoConDigitos)
-    let campoSinDigitos =  texto.match(campoSinDigito).join('\n')
-    //console.log('campoSinDigitos',campoSinDigitos)
-    let camposOrdenados = campoSinDigitos + '\n' + cadenaCampoConDigitos
-    //console.log(camposOrdenados)
-
-    return camposOrdenados
+    return  texto.match(campoSinDigito).join('\n') + 
+             '\n' + contenidoCamposConSinDigito.match(
+                        campoConDigito
+                    ).sort().join('\n')
 }
 
 /***
  * Función que crea expresiones que extraen el campo y contenido
  * @campo descripcion del campo a buscar
  ***/
-function crearExpresionesCampos (campo) {
+const crearExpresionesCampos = campo => {
     return {
         campoConDigito: regEx.crearRegEx.campoConDigito(campo),
         campoSinDigito: regEx.crearRegEx.campoSinDigito(campo),
@@ -46,49 +36,37 @@ function crearExpresionesCampos (campo) {
  * Funcion que detecta campos consecutivos y los ordena
  * @contenidoArchivo texto del archivo
 ***/
-exports.extraerOrdenarCampos = function (contenidoArchivo) {
-    let cont = 0
+exports.extraerOrdenarCampos = (contenidoArchivo) => {
     let campoConDigito    = []
     let campoSinDigito    = []
     let contenidoOrdenado = []
     let expresiones       = []
     let campos = arrCampos.arregloCampos
-    //console.log(arrCampos)
-    //console.log(contenidoArchivo)
-   
+
     for (campo in campos) {
-        //console.log('arrCampos.arregloCampos',arrCampos.arregloCampos[campo])
-        //console.log(arrCampos.arregloCampos[campo])
+
         expresiones.push(crearExpresionesCampos(campos[campo]))
-        //console.log('expresion\n', expresion)
     }
     for(expresion in expresiones) {
-    
+
         if (expresiones[expresion].campoConDigito.test(contenidoArchivo)) {
-        //    console.log(expresiones[expresion])
-        //     console.log(expresiones[expresion].campoConDigito.test(contenidoArchivo))
-                //console.log(contenidoArchivo)
-                //console.log(expresion.campoConDigito)
-                //console.log('Campo a organizar: ', arrCampos.arregloCampos[campo])
-                //console.log('existeCampoConDigito:\n', regEx.jsonTest.pruebaExiste(expresion.campoConDigito, contenidoArchivo))
-                
-                let contenidoCamposConSinDigito = ''
-                contenidoCamposConSinDigito = contenidoArchivo.match(expresiones[expresion].camposConSinDigito).join('\n')
-               // console.log(contenidoCamposConSinDigito)
-                contenidoOrdenado.push(ordenar(contenidoArchivo, contenidoCamposConSinDigito, expresiones[expresion].campoSinDigito, expresiones[expresion].campoConDigito))
-                campoConDigito.push(expresiones[expresion].campoConDigito)
-                campoSinDigito.push(expresiones[expresion].campoSinDigito)
-                
-                //console.log(contenidoOrdenado)
-                // console.log(cont++)
-                //return contenidoOrdenado
-            // } else {
-            //     //console.log('Un \"campo sin digitos\" no es necesario organizar: ', arrCampos.arregloCampos[campo], campo)
+
+            contenidoOrdenado.push(
+                ordenar(
+                    contenidoArchivo, 
+                    contenidoArchivo.match(
+                        expresiones[expresion].camposConSinDigito
+                    ).join('\n'),
+                    expresiones[expresion].campoSinDigito,
+                    expresiones[expresion].campoConDigito
+                )
+            )
+
+            campoConDigito.push(expresiones[expresion].campoConDigito)
+            campoSinDigito.push(expresiones[expresion].campoSinDigito)
         }
     }
-    // for (key in contenidoOrdenado){
-    //     console.log(contenidoOrdenado[key])
-    // }
+
     return {
         campoConDigito: campoConDigito,
         campoSinDigito: campoSinDigito,
