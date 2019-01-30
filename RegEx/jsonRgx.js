@@ -7,7 +7,6 @@
  */
 
 const jsonRegEx = {
-  
   ampersand: /\&/g, //=> &
   comentariosLineaIntls: /^;.*/gm, //=> ;Comentario
   campoConsecutivoIntls: /^\w+\d{3}/m, //=> Campo002, SQL002
@@ -23,7 +22,7 @@ const jsonRegEx = {
   nomComponente: /(?<=^\[)\w*\.(tbl|vis|frm|rep|dlg)(?=\/)/gm,
   nomExtCmp:   /(?<=\[).*?\.(frm|vis|tbl|dlg|rep)/gi, //=> Si ^[ extrae Componente.frm
   nomYtipoEsp: /.*(\/|\\)|\_MAVI.*|\.esp/gi, //De: \File_FRM_MAVI.esp Busca File_FRM
-  parentesisAnidados: /(\((?>[^()]+|(?1))*\))/gm,
+  //parentesisAnidados: /(\((?>[^()]+|(?1))*\))/gm,
   puntoExtension:   /(?<=\.)\w+$/gim, //=> De: Achivo.FRM Busca .FRM
   saltoLineaVacio:  /^\n[\s\t]*/gm, //=> \n\s\t Lineas vacias espacios y tabulador
   tituloComponente: /^\[.*\]/gm,

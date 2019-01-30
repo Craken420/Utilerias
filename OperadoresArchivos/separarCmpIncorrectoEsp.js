@@ -18,7 +18,7 @@ const regEx       = require('../RegEx/jsonRgx')
  ***/
 const eliminarArchivoVacioYCmpIncorrecto = (archivo, expresion, texto) => {
     texto = texto.replace(expresion, '')
-    texto = clsIniCorcheteVacio(texto)
+    texto = regEx.jsonReplace.clsIniCorcheteVacio(texto)
     if(!/\w+/g.test(regEx.jsonReplace.clsComentariosIntls(texto))) {
         eliminarArchivo.eliminarArchivoVacio(texto, archivo)
     }
