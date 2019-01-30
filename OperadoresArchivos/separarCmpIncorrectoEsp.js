@@ -83,8 +83,11 @@ const crearArchivoOAgregarCmp = (expresion, texto) => {
                 regEx.crearRegEx.extraerCmpPorNom(arrNomExtCmpSinDuplx[ nomExtCmp ])
             ).join('\n')
 
-            txtFinal = regEx.jsonReplace.clsSaltoLineaVacio(txtFinal)
-            txtFinal = regEx.jsonReplace.clsIniCorcheteVacio(txtFinal)
+            txtFinal = regEx.jsonReplace.addEspacioCmp(
+                regEx.jsonReplace.clsIniCorcheteVacio(
+                    regEx.jsonReplace.clsSaltoLineaVacio(txtFinal)
+                )
+            )
 
             pcrArchivos.agregarArchivo(
                 'ArchivosOriginales\\' + nombresArchivos[nomExtCmp],
