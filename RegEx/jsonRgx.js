@@ -7,7 +7,7 @@
  */
 
 const jsonRegEx = {
-  ampersand:   /\&/g,   //=> &
+  ampersand:   /\&/g, //=> &
   comentariosLineaIntls: /^;.*/gm, //=> ;Comentario
   campoConsecutivoIntls: /^\w+\d{3}/m, //=> Campo002, SQL002
   componentesIntls:    /\[.*?.*?[^]*?(?=\[)/g, //=> [Componente] contenidoCmp [
