@@ -72,11 +72,11 @@ const crearArchivoOAgregarCmp = (expresion, texto) => {
                                             regEx.expresiones.nomExtCmp
                                         )
                                     )
-        console.log(arrNomExtCmpSinDuplx)
+
         let nombresArchivos  =  crearNombreNomenclaturaArchivoEsp(
                                     arrNomExtCmpSinDuplx
                                 )
-        console.log(nombresArchivos)
+                                
         for (nomExtCmp in arrNomExtCmpSinDuplx) {
 
             let txtFinal =  txtCmpDiffNomArchivo.match(
