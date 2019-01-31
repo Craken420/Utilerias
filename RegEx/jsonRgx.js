@@ -21,12 +21,14 @@ const jsonRegEx = {
   campoConsecutivoIntls: /^\w+\d{3}/m, //=> Campo002, SQL002
   componentesIntls:    /^\[[\W\w]*?(?=(^\[))/g, //=> [Componente] contenidoCmp [
   campoIntlsYcontinua: /^.*?\=<CONTINUA>|<CONTINUA>/gm, //=> SQL002=<CONTINUA>algo
+  contenidoComponente: /(?<=\[.*\])[^]*?(?=\[(?!\]))/g, //=> Sin [nom] extrae hasta [
   continuaAlInicio: /(?<=^.*?\=)<CONTINUA>/m, //=> SQL002= <CONTINUA> Algo
   continuaFinal:    /(?<=.*?)\<CONTINUA\>(\s+|)$/, //=> SQL= Algo <CONTINUA>
   espaciosEntrePalabras1: /(?=\s(\@|\(|\=|\<|\>|\[|\]|\*|\.|\&|\,|\'|\-|\,\@))/gm,
   espaciosEntrePalabras2: /((?=\s(\]\(|\#|\=\@|\(\@|\/|\+|\s\w+\+|\w+)))|((?=\n)|\s)/,
   guionBajoTipoEsp: /\_(?=(frm|vis|tbl|dlg|rep))/gi, //=> Achivo_FRM
   iniCorcheteLineaVacia: /^\[$/m, //=> [
+  iniLineLetra: /^(?=\w)/gm, //=> "ola" no toma "[ola]"
   lineasBlancas: /^\n[\s\t]*/gm,
   nomAccion: /(?!\[\])\[.*?\]/g, //=> [ActivoFijo.tbl/FechaEmision] ang
   nomArchivoEnRuta: /.*\\|.*\//, //=> Busca 'c:/' hasta 'Nombre Archivo.txt'
@@ -80,6 +82,7 @@ const rgxCrear = {
 
 const rgxReplace = {
   addEspacioCmp: texto => { return texto.replace(/^\[/gm, ' \n[')},
+  addTabContenidoCmp:   texto => { return texto.replace(jsonRegEx.iniLineLetra, '\t')},
   crearNomenclaturaEsp: texto =>  { return texto.replace(
                                                   regEx.expresiones.puntoExtension,
                                                   '_'
