@@ -1,5 +1,6 @@
 /***
  * Glosario:
+ * Ini:   Inicio
  * Intls: Intelisis
  * Cmp:   Componente
  * Diff:  Diferente
@@ -8,12 +9,22 @@
 
 const jsonRegEx = {
   ampersand: /\&/g, //=> &
-  comentariosLineaIntls: /^;.*/gm, //=> ;Comentario
+  ansis1: /SET(|[\s]+)ANSI(|[\s]+|\_)NULLS(|[\s]+)(ON|OFF)|SET/gi,
+  ansis2: /(|[\s]+)QUOTED(|[\s]+|\_)IDENTIFIER(|[\s]+)(ON|OFF)/,
+  comentariosLineaIntls:   /^;.*/gm, //=> ;Comentario
+  comentarioSQLAvanzado:   /\/(\*+)([^*]*)(|[*]+|(([*]+[^*]+)*?))(\*+)\//g,
+  comentarioSQLDobleGuion: /(\-\-+).*/gm,
+  comentarioSQLMedio1:  /\/(\*+)(|\n+.*)(|[^*]*)/g,
+  comentarioSQLMedio2: /(|(?:\*(?!)(|[^*]*)(|[*]+[^*]+))*?)\*+\//,
+  comentarioSQLSencillo: /\/\*+([^/]*)\*+\//g,
+  comentarioSQLVacio:    /\/\*+\*+\//g,
   campoConsecutivoIntls: /^\w+\d{3}/m, //=> Campo002, SQL002
   componentesIntls:    /^\[[\W\w]*?(?=(^\[))/g, //=> [Componente] contenidoCmp [
   campoIntlsYcontinua: /^.*?\=<CONTINUA>|<CONTINUA>/gm, //=> SQL002=<CONTINUA>algo
   continuaAlInicio: /(?<=^.*?\=)<CONTINUA>/m, //=> SQL002= <CONTINUA> Algo
   continuaFinal:    /(?<=.*?)\<CONTINUA\>(\s+|)$/, //=> SQL= Algo <CONTINUA>
+  espaciosEntrePalabras1: /(?=\s(\@|\(|\=|\<|\>|\[|\]|\*|\.|\&|\,|\'|\-|\,\@))/gm,
+  espaciosEntrePalabras2: /((?=\s(\]\(|\#|\=\@|\(\@|\/|\+|\s\w+\+|\w+)))|((?=\n)|\s)/,
   guionBajoTipoEsp: /\_(?=(frm|vis|tbl|dlg|rep))/gi, //=> Achivo_FRM
   iniCorcheteLineaVacia: /^\[$/m, //=> [
   lineasBlancas: /^\n[\s\t]*/gm,
@@ -25,12 +36,19 @@ const jsonRegEx = {
   //parentesisAnidados: /(\((?>[^()]+|(?1))*\))/gm,
   puntoExtension:   /\.(?=\w+$)/gim, //=> De: Achivo.FRM Busca .FRM
   saltoLineaVacio:  /^\n[\s\t]*/gm, //=> \n\s\t Lineas vacias espacios y tabulador
+  tabulador:  /\t/mg,
   tituloComponente: /^\[.*\]/gm,
-  tipoEspEnNomenclatura: /(?<=\_)\w+(?=\_)/gi //=> _FRM_
+  tipoEspEnNomenclatura: /(?<=\_)\w+(?=\_)/gi, //=> _FRM_
+  withNolock1: /(\s+|\n+|\s+\n+)with(|\s+|\n+|\s+\n+)\((|\s+|\n+|\s+\n+)/gim,
+  withNolock2: /(rowlock|nolock)(|\s+|\n+|\s+\n+)\)/
 
 }
 
 const rgxCrear = {
+  ansis: () => { return new RegExp(jsonRegEx.ansis1.source + jsonRegEx.ansis1.source,
+                              (jsonRegEx.ansis1.global ? 'g' : '') 
+                            + (jsonRegEx.ansis1.ignoreCase ? 'i' : '')
+                            + (jsonRegEx.ansis1.multiline ? 'm' : ''))},
   campoSinDigito: tipoCampo => { return new RegExp( `^${tipoCampo}\\=.*`, `gim`)},
   campoConDigito: tipoCampo => { return  new RegExp(`^${tipoCampo}\\d{3}\\=.*`, `gim`)},
   campoConSinDigito: tipoCampo => { return  new RegExp(
@@ -42,7 +60,22 @@ const rgxCrear = {
                         `\\[(?!\\w+;)(?!${nomCmt})(?=.*?\\/.*?\\])[^~]*?(?=(\\n|)^\\[)`,
                         `gim`
                       )},
-  extraerCmpPorNom:   nomCmt => { return new RegExp(`\\[${nomCmt}[^~]*?(?=\\[)`, `gi`)}
+  comentarioSQLMedio: () => { return new RegExp(jsonRegEx.comentarioSQLMedio1.source
+                            + jsonRegEx.comentarioSQLMedio2.source, 
+                              (jsonRegEx.comentarioSQLMedio1.global ? 'g' : '') 
+                            + (jsonRegEx.comentarioSQLMedio1.ignoreCase ? 'i' : '')
+                            + (jsonRegEx.comentarioSQLMedio1.multiline ? 'm' : ''))},
+  espaciosEntrePalabras: () => {return jsonRegEx.espaciosEntrePalabras1.source
+                            + jsonRegEx.espaciosEntrePalabras2.source,
+                              (jsonRegEx.espaciosEntrePalabras1.global ? 'g' : '') 
+                            + (jsonRegEx.espaciosEntrePalabras1.ignoreCase ? 'i' : '')
+                            + (jsonRegEx.espaciosEntrePalabras1.multiline ? 'm' : '')},
+  extraerCmpPorNom:   nomCmt => { return new RegExp(`\\[${nomCmt}[^~]*?(?=\\[)`, `gi`)},
+  witchNolock: () => { return new RegExp(jsonRegEx.withNolock1.source
+                            + jsonRegEx.withNolock2.source,
+                              (jsonRegEx.withNolock1.global ? 'g' : '') 
+                            + (jsonRegEx.withNolock1.ignoreCase ? 'i' : '')
+                            + (jsonRegEx.withNolock1.multiline ? 'm' : ''))}
 }
 
 const rgxReplace = {
@@ -60,15 +93,34 @@ const rgxReplace = {
                                                 jsonRegEx.comentariosLineaIntls,
                                               '')
                                      },
+  clsComentariosSQL: texto => {
+                        texto = texto.replace(jsonRegEx.comentarioSQLVacio, '')
+                        texto = texto.replace(jsonRegEx.comentarioSQLSencillo, '')
+                        texto = texto.replace(rgxCrear.comentarioSQLMedio(), '')
+                        texto = texto.replace(jsonRegEx.comentarioSQLAvanzado, '')
+                        texto = texto.replace(jsonRegEx.comentarioSQLDobleGuion, '')
+                        return texto
+                      },
   clsIniCorcheteVacio: texto => { return texto.replace(
                                                 jsonRegEx.iniCorcheteLineaVacia,
                                               '')
                                      },
+  clsPoliticas: texto => { 
+      texto = texto.replace(rgxCrear.ansis(), '')
+      return texto.replace(rgxCrear.witchNolock(), '')
+  },
   clsRuta: ruta  => { return ruta.replace(jsonRegEx.nombreArchivoEnRuta, '')},
   clsSaltoLineaVacio: texto => { return texto.replace(
                                                 jsonRegEx.saltoLineaVacio, 
                                               '')
                                },
+  clsTextoBasura: texto => {
+    texto = texto.replace(jsonRegEx.saltoLineaVacio, '')
+    texto = texto.replace(jsonRegEx.tabulador, ' ')
+    texto = texto.replace(rgxCrear.espaciosEntrePalabras(), '')
+    texto = texto.replace(jsonRegEx.ampersand, '')
+    return texto
+  },
   dosPuntosPorIgual: texto => { return texto.replace(/=/g, ':')},
   extraerNomTipoEsp: ruta => { return ruta.replace( jsonRegEx.nomYtipoEsp, '')},
   minusculasPorMayuscula: texto => { return texto.replace(
@@ -106,7 +158,7 @@ const rgxReplace = {
                                                       jsonRegEx.saltoLinea,
                                                       ', '
                                               )
-                                     },
+                                     }
 }
 
 module.exports.expresiones = jsonRegEx
