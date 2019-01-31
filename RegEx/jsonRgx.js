@@ -9,15 +9,15 @@
 
 const jsonRegEx = {
   ampersand: /\&/g, //=> &
-  ansis1: /SET(|[\s]+)ANSI(|[\s]+|\_)NULLS(|[\s]+)(ON|OFF)|SET/gi,
-  ansis2: /(|[\s]+)QUOTED(|[\s]+|\_)IDENTIFIER(|[\s]+)(ON|OFF)/,
+  ansis1: /SET(|[\s]+)ANSI(|[\s]+|\_)NULLS(|[\s]+)(ON|OFF)|SET/gi, //=> SET ANSI_NULLS
+  ansis2: /(|[\s]+)QUOTED(|[\s]+|\_)IDENTIFIER(|[\s]+)(ON|OFF)/, //=> SET ANSI_NULLS
   comentariosLineaIntls:   /^;.*/gm, //=> ;Comentario
-  comentarioSQLAvanzado:   /\/(\*+)([^*]*)(|[*]+|(([*]+[^*]+)*?))(\*+)\//g,
-  comentarioSQLDobleGuion: /(\-\-+).*/gm,
-  comentarioSQLMedio1:  /\/(\*+)(|\n+.*)(|[^*]*)/g,
-  comentarioSQLMedio2: /(|(?:\*(?!)(|[^*]*)(|[*]+[^*]+))*?)\*+\//,
-  comentarioSQLSencillo: /\/\*+([^/]*)\*+\//g,
-  comentarioSQLVacio:    /\/\*+\*+\//g,
+  comentarioSQLAvanzado:   /\/(\*+)([^*]*)(|[*]+|(([*]+[^*]+)*?))(\*+)\//g, /*mucho*/
+  comentarioSQLDobleGuion: /(\-\-+).*/gm, //=> //comentario
+  comentarioSQLMedio1:  /\/(\*+)(|\n+.*)(|[^*]*)/g, /* mas o menos contenido*/
+  comentarioSQLMedio2: /(|(?:\*(?!)(|[^*]*)(|[*]+[^*]+))*?)\*+\//, /* mas o menos*/
+  comentarioSQLSencillo: /\/\*+([^/]*)\*+\//g, /* comentario linea */
+  comentarioSQLVacio:    /\/\*+\*+\//g, //=> /**/
   campoConsecutivoIntls: /^\w+\d{3}/m, //=> Campo002, SQL002
   componentesIntls:    /^\[[\W\w]*?(?=(^\[))/g, //=> [Componente] contenidoCmp [
   campoIntlsYcontinua: /^.*?\=<CONTINUA>|<CONTINUA>/gm, //=> SQL002=<CONTINUA>algo
@@ -28,19 +28,19 @@ const jsonRegEx = {
   guionBajoTipoEsp: /\_(?=(frm|vis|tbl|dlg|rep))/gi, //=> Achivo_FRM
   iniCorcheteLineaVacia: /^\[$/m, //=> [
   lineasBlancas: /^\n[\s\t]*/gm,
-  nomAccion: /(?!\[\])\[.*?\]/g, //=> [ActivoFijo.tbl/FechaEmision]
+  nomAccion: /(?!\[\])\[.*?\]/g, //=> [ActivoFijo.tbl/FechaEmision] ang
   nomArchivoEnRuta: /.*\\|.*\//, //=> Busca 'c:/' hasta 'Nombre Archivo.txt'
-  nomComponente: /(?<=^\[)\w*\.(tbl|vis|frm|rep|dlg)(?=\/)/gm,
+  nomComponente: /(?<=^\[)\w*\.(tbl|vis|frm|rep|dlg)(?=\/)/gm, //=> NomComponente.frm
   nomExtCmp:   /(?<=\[).*?\.(frm|vis|tbl|dlg|rep)/gi, //=> Si ^[ extrae Componente.frm
   nomYtipoEsp: /.*(\/|\\)|\_MAVI.*|\.esp/gi, //De: \File_FRM_MAVI.esp Busca File_FRM
   //parentesisAnidados: /(\((?>[^()]+|(?1))*\))/gm,
   puntoExtension:   /\.(?=\w+$)/gim, //=> De: Achivo.FRM Busca .FRM
   saltoLineaVacio:  /^\n[\s\t]*/gm, //=> \n\s\t Lineas vacias espacios y tabulador
-  tabulador:  /\t/mg,
-  tituloComponente: /^\[.*\]/gm,
+  tabulador:  /\t/mg, //=> \t
+  tituloComponente: /^\[.*\]/gm, //=> [ActivoFijo.tbl/FechaEmision] btw
   tipoEspEnNomenclatura: /(?<=\_)\w+(?=\_)/gi, //=> _FRM_
-  withNolock1: /(\s+|\n+|\s+\n+)with(|\s+|\n+|\s+\n+)\((|\s+|\n+|\s+\n+)/gim,
-  withNolock2: /(rowlock|nolock)(|\s+|\n+|\s+\n+)\)/
+  withNolock1: /(\s+|\n+|\s+\n+)with(|\s+|\n+|\s+\n+)\((|\s+|\n+|\s+\n+)/gim, //=> With
+  withNolock2: /(rowlock|nolock)(|\s+|\n+|\s+\n+)\)///=> With (rowlock|nolock)
 
 }
 
