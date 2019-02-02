@@ -8,4 +8,3 @@ exports.carpetaCodigoOriginal3000 = rootIntelisis3000 + 'Codigo Original\\'
 
 exports.archivos = './Archivos'
 exports.carpetaTesting = './Testing\\'
-//C:\Users\lapena\Documents\Luis Angel\Intelisis\Intelisis3100\Codigo Original

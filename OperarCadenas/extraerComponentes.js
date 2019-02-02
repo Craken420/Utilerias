@@ -1,5 +1,6 @@
 const regex = require('../RegEx/jsonRgx')
 
+/** Aun falta determinar su uso ***/
 exports.extraerComponentes = contenidoArchivo => {
     contenidoArchivo = contenidoArchivo + '\n['
 
@@ -17,7 +18,7 @@ exports.extraerComponentes = contenidoArchivo => {
         if (acciones[key] != null) {
             let textoFinal = extraerObjetosCampo(texto, tipoCampo)
             if(textoFinal != null && textoFinal != undefined) {
-                fq.crearArchivoPrueba(archivo, 
+                fq.crearArchivoPrueba(archivo,
                     regex.jsonReplace.clsSaltoLineaVacio(textoFinal)
                 )
             }

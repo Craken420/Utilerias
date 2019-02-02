@@ -1,6 +1,9 @@
 /*** Operadores de archivos ***/
-const pcrArchivos = require('../OperadoresArchivos/procesadorArchivos')
-const eliminarArchivo = require('../OperadoresArchivos/eliminarArchivoVacio')
+const { crearNombreNomenclaturaArchivoEsp } = require('./crearNomenclatura_MaviEsp')
+const { eliminarArchivoVacio } = require('./liminarArchivoVacio')
+const { eliminarArchivoVacioYCmpIncorrecto } = require('./eliminarCmpYArchivoVacio')
+const { crearNomExtensionTipoEsp } = require('./crearNomExtensionTipoEsp')
+const pcrArchivos = require('./procesadorArchivos')
 
 /*** Operadores de Objetos ***/
 const pcrArreglo = require('../OperadorObjetos/eliminarDuplicado')
@@ -9,60 +12,14 @@ const pcrArreglo = require('../OperadorObjetos/eliminarDuplicado')
 const regEx       = require('../RegEx/jsonRgx')
 
 /***
- * Función para eliminar el componente incorrecto y validar si esta vacio
- * o solo con comentarios para eliminarlo
- * @archivo   archivo al cual se le eliminara el contenido
- * @expresion abarca el bloque de información que sera eliminada
- * @texto     contenido que se almacenara en el archivo 
- *            despues de operar con la expresion
- ***/
-const eliminarArchivoVacioYCmpIncorrecto = (archivo, expresion, texto) => {
-    texto = texto.replace(expresion, '')
-    texto = regEx.jsonReplace.clsIniCorcheteVacio(texto)
-    if(!/\w+/g.test(regEx.jsonReplace.clsComentariosIntls(texto))) {
-        eliminarArchivo.eliminarArchivoVacio(texto, archivo)
-    }
-
-    return texto
-}
-
-/*** 
- * Función que crea una nomenclatura que se usara como nombre de archivo
- * Ejemplo: recive Archivo.frm y retorna en Archivo_FRM_MAVI.esp
- * @arreglo Contiene los nombres que seran transformados
- ***/
-const crearNombreNomenclaturaArchivoEsp = arreglo => {
-    return arreglo.map(x => {
-            x = x.replace(regEx.expresiones.puntoExtension, '_') + '_MAVI.esp'
-            x = x.replace(
-                regEx.expresiones.tipoEspEnNomenclatura,
-                x => x.toUpperCase()
-            )
-            return x
-        }
-    )
-}
-
-/***
- * Función que recive un archivo con la nomenclaruta Archivo_FRM_MAVI.esp
- * y retorna Archivo.frm
- * @archivo ruta del archivo
- ***/
-const crearNombreExtensionTipoEsp = archivo => {
-    return  regEx.jsonReplace.minusculasPorMayuscula(
-                regEx.jsonReplace.puntoPorGuionBajoTipoEsp(
-                    regEx.jsonReplace.extraerNomTipoEsp(archivo)
-                )
-            )
-}
-
-/***
- * Función que crea un archivo con la nomenclatura determinada dependiendo el archivo
- * agregando los componentes al archivo correcto
+ * Función que extrae los componentes diferentes al nombre del archivo
+ * crea una nomenclatura determinada con el componente y su tipo
+ * que sera usada como nombre para crear el archivo en caso de que no existe
+ * de forma contrarea agregara los componentes al archivo existente
  * @expresion   extrae el texto de los Componentes Diferentes al Nombre del Archivo
  * @texto       contenido del archivo
  ***/
-const crearArchivoOAgregarCmp = (expresion, texto) => {
+const crearNomenclaturaYArchivoOAdd = (expresion, texto) => {
     let txtCmpDiffNomArchivo = texto.match(expresion).join('\n') + '\n['
 
     if (regEx.expresiones.nomExtCmp.test(txtCmpDiffNomArchivo)) {
@@ -98,27 +55,31 @@ const crearArchivoOAgregarCmp = (expresion, texto) => {
 }
 
 /***
- * Función que detecta si un componente esta fuera de lugar y si es el caso
- * crea Archivos con nomenclaruta de los componentes
- * agregando el contenido de los componentes al archivo correcto
+ * Función para elimina archivos vacios usando la fn "eliminarArchivoVacio".
+ * Extrae los componentes fuera del lugar (Que sean diferentes al nombre).
+ * Crea nomenclatura con nombre y tipo del componente para nombre de archivo
+ *      usando la función crearNombreExtensionTipoEsp
+ * Crea archivos para esos componentes fuera de lugar o los agrega al correcto
+ *      con el uso de crearArchivoOAgregarCmpEsp
+ * A su vez elimina los componentes incorrectos en contenido, si queda vacio elimina el archivo
  * @archivo ruta del archivo
  * @texto   contenido del archivo
  ***/
 exports.crearArchivoCmpAddCmpArchivo = (archivo, texto) => {
 
-    eliminarArchivo.eliminarArchivoVacio(texto, archivo)
+    eliminarArchivoVacio(texto, archivo)
 
     texto = texto + '\n['
     let textoBorrar = texto
     texto = regEx.jsonReplace.clsComentariosIntls(texto)
 
     let rgxExtraerCmpDiffNomArchivo = regEx.crearRegEx.cmpDiffNomArchivo(
-                        crearNombreExtensionTipoEsp(archivo)
+                        crearNomExtensionTipoEsp(archivo)
                     )
 
     if (rgxExtraerCmpDiffNomArchivo.test(texto)) {
 
-        crearArchivoOAgregarCmp(rgxExtraerCmpDiffNomArchivo, texto)
+        crearNomenclaturaYArchivoOAdd(rgxExtraerCmpDiffNomArchivo, texto)
 
         textoBorrar = eliminarArchivoVacioYCmpIncorrecto(
             archivo, rgxExtraerCmpDiffNomArchivo, textoBorrar

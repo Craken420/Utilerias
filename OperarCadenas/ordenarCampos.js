@@ -34,6 +34,15 @@ const crearExpresionesCampos = campo => {
 
 /***
  * Funcion que detecta campos consecutivos y los ordena
+ * retornando 3 arreglos
+ *  1: campoConDigito - campos extraidos con digito,
+ *  2: campoSinDigito - campos extraidos sin digito,,
+ *  3: contenidoOrdenado - campos ordendos
+ * Ejemplo:
+ *     Recive:  ListaCampos=Articulo<BR>RamaListaCampos1 <B<CONTINUA>
+ *              ListaCampos002=<CONTINUA>R>TieneCaducidad
+ *
+ *     Retorna: ListaCampos=Articulo<BR>RamaListaCampos1 <BR>TieneCaducidad
  * @contenidoArchivo texto del archivo
 ***/
 exports.extraerOrdenarCampos = (contenidoArchivo) => {
@@ -73,4 +82,3 @@ exports.extraerOrdenarCampos = (contenidoArchivo) => {
         contenidoOrdenado: contenidoOrdenado,
     }
 }
-

@@ -1,3 +1,7 @@
+/***
+ * Función que busca los duplicados de un arreglo
+ * @arreglo contiene valores que probablemente sean duplicados
+ ***/
 exports.buscarDuplicado = arreglo => {
     var object = {}
     var result = []

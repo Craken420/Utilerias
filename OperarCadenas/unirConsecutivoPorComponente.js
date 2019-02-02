@@ -1,6 +1,6 @@
 /*** Operadores de cadena ***/
-const organizar     = require('../OperarCadenas/ordenarCampos')
-const unir          = require('../OperarCadenas/unirConsecutivos')
+const organizar     = require('./ordenarCampos')
+const unir          = require('./unirConsecutivos')
 
 /*** 
  * Une los campos consecutivos de un componente Intelisis

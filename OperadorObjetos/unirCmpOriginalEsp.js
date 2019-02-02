@@ -1,4 +1,10 @@
-const unirOriginalEsp = (objDominador, objDenominador) => {
+/***
+ * Une dos objetos donde las propiedades del objDominador 
+ * sera sobre-escrito por objDenominador
+ * @objDominador objeto que sera sobre-escrito
+ * @objDenominador objeto que sobre-escribira las propiedades del objeto con las suyas
+ ***/
+exports.unirOriginalSobrEscritura = (objDominador, objDenominador) => {
     for (key in objDominador) {
   
         if (objDenominador[key] != undefined) {
@@ -14,5 +20,3 @@ const unirOriginalEsp = (objDominador, objDenominador) => {
 
   return  Object.assign(objDominador, objDenominador)
 }
-
-module.exports.cmpOriginalEsp = unirOriginalEsp

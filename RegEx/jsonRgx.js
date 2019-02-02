@@ -51,7 +51,7 @@ const rgxCrear = {
                               (jsonRegEx.ansis1.global ? 'g' : '') 
                             + (jsonRegEx.ansis1.ignoreCase ? 'i' : '')
                             + (jsonRegEx.ansis1.multiline ? 'm' : ''))},
-  campoSinDigito: tipoCampo => { return new RegExp( `^${tipoCampo}\\=.*`, `gim`)},
+  campoSinDigito: tipoCampo => { return new RegExp(`^${tipoCampo}\\=.*`, `gim`)},
   campoConDigito: tipoCampo => { return  new RegExp(`^${tipoCampo}\\d{3}\\=.*`, `gim`)},
   campoConSinDigito: tipoCampo => { return  new RegExp(
                                                   `^${tipoCampo}(\\d{3}|)\\=.*`,
@@ -67,6 +67,7 @@ const rgxCrear = {
                               (jsonRegEx.comentarioSQLMedio1.global ? 'g' : '') 
                             + (jsonRegEx.comentarioSQLMedio1.ignoreCase ? 'i' : '')
                             + (jsonRegEx.comentarioSQLMedio1.multiline ? 'm' : ''))},
+  contenidoCampo: campo => { return new RegExp(`(?<=^${campo}\\=).*`, `gm`)},
   espaciosEntrePalabras: () => {return jsonRegEx.espaciosEntrePalabras1.source
                             + jsonRegEx.espaciosEntrePalabras2.source,
                               (jsonRegEx.espaciosEntrePalabras1.global ? 'g' : '') 

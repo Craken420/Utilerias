@@ -8,6 +8,7 @@ const stat          = promisify(fs.stat)
 /*** 
  * Función para obtener los archivos de una carpeta, 
  * validando si es directorio para solo arrojar archivos
+ * @carpeta ruta del directorio a examinar
  ***/
 exports.obtenerArchivos = async carpeta => {
   const subCarpetas = await leerCarpeta(carpeta)

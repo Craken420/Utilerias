@@ -1,5 +1,10 @@
 const fs = require('fs')
 
+/*** 
+ * Crea un archivo en caso de que no exista
+ * de forma contrarea, agregara el contenido al final
+ * del contenido original del archivo existente
+ * ***/
 exports.agregarArchivo = (archivo, texto) => {
     fs.appendFileSync(archivo, texto, {flag:'as'})
 }
