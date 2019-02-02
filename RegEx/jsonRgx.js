@@ -72,7 +72,7 @@ const rgxCrear = {
                               (jsonRegEx.espaciosEntrePalabras1.global ? 'g' : '') 
                             + (jsonRegEx.espaciosEntrePalabras1.ignoreCase ? 'i' : '')
                             + (jsonRegEx.espaciosEntrePalabras1.multiline ? 'm' : '')},
-  extraerCmpPorNom:   nomCmt => { return new RegExp(`\\[${nomCmt}[^~]*?(?=\\[)`, `gi`)},
+  extraerCmpPorNom:   nomCmt => { return new RegExp(`^\\[(.*?|)${nomCmt}[^]*?(?=\\[)`, `gim`)},
   witchNolock: () => { return new RegExp(jsonRegEx.withNolock1.source
                             + jsonRegEx.withNolock2.source,
                               (jsonRegEx.withNolock1.global ? 'g' : '') 
