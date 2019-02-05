@@ -1,19 +1,19 @@
 /*** Operadores de cadena ***/
-const organizar     = require('./ordenarCampos')
-const remplazar     = require('./remplazarContenido')
-const regEx         = require('../RegEx/jsonRgx')
-const unir          = require('./unirConsecutivos')
+const { extraerOrdenarCampos } = require('./ordenarCampos')
+const regEx = require('../RegEx/jsonRgx')
+const { remplazarContenido } = require('./remplazarContenido')
+const { unificarCamposConsecutivos } = require('./unirConsecutivos')
 
 /*** 
  * Une los campos consecutivos de un componente Intelisis
  * @componente Componente Intelisis con campos consecutivos
 ***/
 const ordenarUnirCampos = componente => {
-    let camposOrdenados = organizar.extraerOrdenarCampos(componente)
+    let camposOrdenados = extraerOrdenarCampos(componente)
     let camposUnificados = []
 
     for (contenido in camposOrdenados.contenidoOrdenado){
-        camposUnificados.push(unir.unificarCamposConsecutivos(
+        camposUnificados.push(unificarCamposConsecutivos(
             camposOrdenados.contenidoOrdenado[contenido])
         )
     }
@@ -50,7 +50,7 @@ exports.unirCamposConsecutivosComponente = (contenidoArchivo) => {
 
         if (regEx.expresiones.campoConsecutivoIntls.test(componentesArchivo[componente])) {
 
-            contenidoArchivo = remplazar.remplazarContenido(contenidoArchivo,
+            contenidoArchivo = remplazarContenido(contenidoArchivo,
                 componentesArchivo[componente], 
                 ordenarUnirCampos(
                     componentesArchivo[componente]
