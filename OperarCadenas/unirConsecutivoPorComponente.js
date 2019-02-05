@@ -45,7 +45,7 @@ exports.unirCamposConsecutivosComponente = (contenidoArchivo) => {
     let componentesArchivo = contenidoModificado.match(
         regEx.expresiones.componentesIntls
     )
-    console.log(contenidoModificado)
+    
     for (componente in componentesArchivo) {
 
         if (regEx.expresiones.campoConsecutivoIntls.test(componentesArchivo[componente])) {
