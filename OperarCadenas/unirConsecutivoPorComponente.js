@@ -41,11 +41,11 @@ const ordenarUnirCampos = componente => {
 exports.unirCamposConsecutivosComponente = (contenidoArchivo) => {
     let contenidoModificado = contenidoArchivo + '\n['
     contenidoModificado = regEx.jsonReplace.clsComentariosIntls(contenidoModificado)
-
+    
     let componentesArchivo = contenidoModificado.match(
         regEx.expresiones.componentesIntls
     )
-
+    console.log(contenidoModificado)
     for (componente in componentesArchivo) {
 
         if (regEx.expresiones.campoConsecutivoIntls.test(componentesArchivo[componente])) {

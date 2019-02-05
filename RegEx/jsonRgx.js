@@ -19,7 +19,7 @@ const jsonRegEx = {
   comentarioSQLSencillo: /\/\*+([^/]*)\*+\//g, /* comentario linea */
   comentarioSQLVacio:    /\/\*+\*+\//g, //=> /**/
   campoConsecutivoIntls: /^\w+\d{3}/m, //=> Campo002, SQL002
-  componentesIntls:    /^\[[\W\w]*?(?=(^\[))/g, //=> [Componente] contenidoCmp [
+  componentesIntls:    /^\[[\W\w]*?(?=(^\[))/gm, //=> [Componente] contenidoCmp [
   campoIntlsYcontinua: /^.*?\=<CONTINUA>|<CONTINUA>/gm, //=> SQL002=<CONTINUA>algo
   contenidoComponente: /(?<=\[.*\])[^]*?(?=\[(?!\]))/g, //=> Sin [nom] extrae hasta [
   continuaAlInicio: /(?<=^.*?\=)<CONTINUA>/m, //=> SQL002= <CONTINUA> Algo
