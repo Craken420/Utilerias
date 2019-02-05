@@ -59,10 +59,6 @@ exports.unirCamposConsecutivosComponente = (contenidoArchivo) => {
         }
     }
 
-    contenidoArchivo = regEx.jsonReplace.clsIniCorcheteLineaVacia(
-                                            contenidoArchivo
-                                        )
-
     contenidoArchivo = regEx.jsonReplace.clsSaltoLineaVacio(contenidoArchivo)
     contenidoArchivo = regEx.jsonReplace.addEspacioCmp(contenidoArchivo)
 

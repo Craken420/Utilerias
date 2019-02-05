@@ -113,7 +113,7 @@ const rgxReplace = {
       texto = texto.replace(rgxCrear.ansis(), '')
       return texto.replace(rgxCrear.witchNolock(), '')
   },
-  clsRuta: ruta  => { return ruta.replace(jsonRegEx.nombreArchivoEnRuta, '')},
+  clsRuta: ruta  => { return ruta.replace(jsonRegEx.nomArchivoEnRuta, '')},
   clsSaltoLineaVacio: texto => { return texto.replace(
                                                 jsonRegEx.saltoLineaVacio, 
                                               '')
