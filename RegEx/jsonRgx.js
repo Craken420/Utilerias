@@ -45,14 +45,6 @@ const rgxCrear = {
                                               ).replace(/\\s$/, '')}`, ``)
                                            },
 
-  espaciosEntrePalabras: () => {return new RegExp(   rgxExpresiones.espaciosEntrePalabras1.source
-                                                  +  rgxExpresiones.espaciosEntrePalabras2.source,
-                                                    (rgxExpresiones.espaciosEntrePalabras1.global ? 'g' : '') 
-                                                  + (rgxExpresiones.espaciosEntrePalabras1.ignoreCase ? 'i' : '')
-                                                  + (rgxExpresiones.espaciosEntrePalabras1.multiline ? 'm' : '')
-                                                 )
-                                  },
-
   extraerCmpPorNom: nomCmt => { return new RegExp(`^\\[(.*?|)${nomCmt}[^]*?(?=\\[)`, `gim`)},
 
   witchNolock: () => { return new RegExp(    rgxExpresiones.withNolock1.source
@@ -102,7 +94,7 @@ const rgxCls = {
 
   clsIniCorcheteLineaVacia: texto => { return texto.replace(rgxExpresiones.iniCorcheteLineaVacia, '')},
 
-  clsEspacioEntrePalabras:  texto => { return texto.replace(rgxExpresiones.espaciosEntrePalabrasOtimizada, ' ')},
+  clsEspacioEntrePalabras:  texto => { return texto.replace(rgxExpresiones.espaciosEntrePalabras, ' ')},
 
   clsPoliticas: texto => {
       texto = texto.replace(rgxCrear.ansis(), '')
@@ -112,7 +104,6 @@ const rgxCls = {
   clsTextoBasura: texto => {
       texto = texto.replace(rgxExpresiones.saltoLineaVacio, '')
       texto = texto.replace(rgxExpresiones.tabulador, ' ')
-      texto = texto.replace(rgxExpresiones.espaciosEntrePalabras(), '')
       texto = texto.replace(rgxExpresiones.ampersand, '')
       return texto
   },
@@ -144,10 +135,8 @@ const rgxExpresiones = {
   comentarioSQLVacio:    /\/\*+\*+\//g, //=> /**/
 
   campoConsecutivoIntls: /^\w+\d{3}/m, //=> Campo002, SQL002
-  //Falta probar
-  nuevoComponentesIntls: /\[[\W\w]*(?=^\[)|\[[^]*$/gm, //=> [Componente] contenidoComponente [
 
-  componentesIntls:    /^\[[\W\w]*?(?=(^\[))/g, //=> [Componente] contenidoCmp [
+  componentesIntls: /\[[\W\w]*(?=^\[)|\[[^]*$/gm, //=> [Componente] contenidoComponente [
 
   campoIntlsYcontinua: /^.*?\=<CONTINUA>|<CONTINUA>/gm, //=> SQL002=<CONTINUA>algo
 
@@ -157,11 +146,7 @@ const rgxExpresiones = {
 
   continuaFinal:    /(?<=.*?)\<CONTINUA\>(\s+|)$/, //=> SQL= Algo <CONTINUA>
 
-  espaciosEntrePalabras1: /(?=\s(\@|\(|\=|\<|\>|\[|\]|\*|\.|\&|\,|\'|\-|\,\@))/gm,
-
-  espaciosEntrePalabras2: /((?=\s(\]\(|\#|\=\@|\(\@|\/|\+|\s\w+\+|\w+)))|((?=\n)|\s)/,
-
-  espaciosEntrePalabrasOtimizada: /(?<!\s)(?<=([\w]+|[\W]+)(?!\r\n))\s+(?=([\w]+|[\W]+))/g, //=> espacios'  'entre texto
+  espaciosEntrePalabras: /(?<!\s)(?<=([\w]+|[\W]+)(?!\r\n))\s+(?=([\w]+|[\W]+))/g, //=> espacios'  'entre texto
 
   guionBajoTipoEsp: /\_(?=(frm|vis|tbl|dlg|rep))/gi, //=> Achivo_FRM
 
