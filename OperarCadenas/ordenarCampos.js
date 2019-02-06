@@ -26,9 +26,9 @@ const ordenar = (texto, contenidoCamposConSinDigito,
  ***/
 const crearExpresionesCampos = campo => {
     return {
-        campoConDigito: regEx.crearRegEx.campoConDigito(campo),
-        campoSinDigito: regEx.crearRegEx.campoSinDigito(campo),
-        camposConSinDigito: regEx.crearRegEx.campoConSinDigito(campo)
+        campoConDigito: regEx.Crear.campoConDigito(campo),
+        campoSinDigito: regEx.Crear.campoSinDigito(campo),
+        camposConSinDigito: regEx.Crear.campoConSinDigito(campo)
     } 
 }
 

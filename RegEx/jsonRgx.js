@@ -1,170 +1,276 @@
 /***
  * Glosario:
- * Ini:   Inicio
  * Intls: Intelisis
- * Cmp:   Componente
- * Diff:  Diferente
- * Nom:   Nombre
+ * Cmp: Componente
  */
 
-const jsonRegEx = {
-  ampersand: /\&/g, //=> &
-  ansis1: /SET(|[\s]+)ANSI(|[\s]+|\_)NULLS(|[\s]+)(ON|OFF)|SET/gi, //=> SET ANSI_NULLS
-  ansis2: /(|[\s]+)QUOTED(|[\s]+|\_)IDENTIFIER(|[\s]+)(ON|OFF)/, //=> SET ANSI_NULLS
-  comentariosLineaIntls:   /^;.*/gm, //=> ;Comentario
-  comentarioSQLAvanzado:   /\/(\*+)([^*]*)(|[*]+|(([*]+[^*]+)*?))(\*+)\//g, /*mucho*/
-  comentarioSQLDobleGuion: /(\-\-+).*/gm, //=> //comentario
-  comentarioSQLMedio1:  /\/(\*+)(|\n+.*)(|[^*]*)/g, /* mas o menos contenido*/
-  comentarioSQLMedio2: /(|(?:\*(?!)(|[^*]*)(|[*]+[^*]+))*?)\*+\//, /* mas o menos*/
-  comentarioSQLSencillo: /\/\*+([^/]*)\*+\//g, /* comentario linea */
-  comentarioSQLVacio:    /\/\*+\*+\//g, //=> /**/
-  campoConsecutivoIntls: /^\w+\d{3}/m, //=> Campo002, SQL002
-  componentesIntls:    /^\[[\W\w]*?(?=(^\[))/g, //=> [Componente] contenidoCmp [
-  campoIntlsYcontinua: /^.*?\=<CONTINUA>|<CONTINUA>/gm, //=> SQL002=<CONTINUA>algo
-  contenidoComponente: /(?<=\[.*\])[^]*?(?=\[(?!\]))/g, //=> Sin [nom] extrae hasta [
-  continuaAlInicio: /(?<=^.*?\=)<CONTINUA>/m, //=> SQL002= <CONTINUA> Algo
-  continuaFinal:    /(?<=.*?)\<CONTINUA\>(\s+|)$/, //=> SQL= Algo <CONTINUA>
-  espaciosEntrePalabras1: /(?=\s(\@|\(|\=|\<|\>|\[|\]|\*|\.|\&|\,|\'|\-|\,\@))/gm,
-  espaciosEntrePalabras2: /((?=\s(\]\(|\#|\=\@|\(\@|\/|\+|\s\w+\+|\w+)))|((?=\n)|\s)/,
-  guionBajoTipoEsp: /\_(?=(frm|vis|tbl|dlg|rep))/gi, //=> Achivo_FRM
-  iniCorcheteLineaVacia: /^\[$/m, //=> [
-  iniLineLetra: /^(?=\w)/gm, //=> "ola" no toma "[ola]"
-  lineasBlancas: /^\n[\s\t]*/gm,
-  nomAccion: /(?!\[\])\[.*?\]/g, //=> [ActivoFijo.tbl/FechaEmision] ang
-  nomArchivoEnRuta: /.*\\|.*\//, //=> Busca 'c:/' hasta 'Nombre Archivo.txt'
-  nomComponente: /(?<=^\[)\w*\.(tbl|vis|frm|rep|dlg)(?=\/)/gm, //=> NomComponente.frm
-  nomExtCmp:   /(?<=\[).*?\.(frm|vis|tbl|dlg|rep)/gi, //=> Si ^[ extrae Componente.frm
-  nomYtipoEsp: /.*(\/|\\)|\_MAVI.*|\.esp/gi, //De: \File_FRM_MAVI.esp Busca File_FRM
-  //parentesisAnidados: /(\((?>[^()]+|(?1))*\))/gm,
-  puntoExtension:   /\.(?=\w+$)/gim, //=> De: Achivo.FRM Busca .FRM
-  saltoLineaVacio:  /^\n[\s\t]*/gm, //=> \n\s\t Lineas vacias espacios y tabulador
-  tabulador:  /\t/mg, //=> \t
-  tituloComponente: /^\[.*\]/gm, //=> [ActivoFijo.tbl/FechaEmision] btw
-  tipoEspEnNomenclatura: /(?<=\_)\w+(?=\_)/gi, //=> _FRM_
-  withNolock1: /(\s+|\n+|\s+\n+)with(|\s+|\n+|\s+\n+)\((|\s+|\n+|\s+\n+)/gim, //=> With
-  withNolock2: /(rowlock|nolock)(|\s+|\n+|\s+\n+)\)///=> With (rowlock|nolock)
-
+const rgxAgregar ={
+  addEspacioCmp: texto => { return texto.replace(/^\[/gm, ' \n[')}
 }
 
 const rgxCrear = {
-  ansis: () => { return new RegExp(jsonRegEx.ansis1.source + jsonRegEx.ansis1.source,
-                              (jsonRegEx.ansis1.global ? 'g' : '') 
-                            + (jsonRegEx.ansis1.ignoreCase ? 'i' : '')
-                            + (jsonRegEx.ansis1.multiline ? 'm' : ''))},
+  ansis: () => { return new RegExp(rgxExpresiones.ansis1.source + rgxExpresiones.ansis1.source,
+                                      (rgxExpresiones.ansis1.global ? 'g' : '') 
+                                    + (rgxExpresiones.ansis1.ignoreCase ? 'i' : '')
+                                    + (rgxExpresiones.ansis1.multiline ? 'm' : '')
+                                  )
+                              },
+
   campoSinDigito: tipoCampo => { return new RegExp(`^${tipoCampo}\\=.*`, `gim`)},
+
   campoConDigito: tipoCampo => { return  new RegExp(`^${tipoCampo}\\d{3}\\=.*`, `gim`)},
-  campoConSinDigito: tipoCampo => { return  new RegExp(
-                                                  `^${tipoCampo}(\\d{3}|)\\=.*`,
-                                                  `gim`
-                                                )
-                                  },
-  cmpDiffNomArchivo:  nomCmt => { return new RegExp(
-                        `\\[(?!\\w+;)(?!${nomCmt})(?=.*?\\/.*?\\])[^~]*?(?=(\\n|)^\\[)`,
-                        `gim`
-                      )},
-  comentarioSQLMedio: () => { return new RegExp(jsonRegEx.comentarioSQLMedio1.source
-                            + jsonRegEx.comentarioSQLMedio2.source, 
-                              (jsonRegEx.comentarioSQLMedio1.global ? 'g' : '') 
-                            + (jsonRegEx.comentarioSQLMedio1.ignoreCase ? 'i' : '')
-                            + (jsonRegEx.comentarioSQLMedio1.multiline ? 'm' : ''))},
+
+  campoConSinDigito: tipoCampo => { return  new RegExp(`^${tipoCampo}(\\d{3}|)\\=.*`,`gim`)},
+
+  cmpDiffNomArchivo: nomCmt => { return new RegExp(
+      `\\[(?!\\w+;)(?!${nomCmt})(?=.*?\\/.*?\\])[^~]*?(?=(\\n|)^\\[)`,
+      `gim`
+  )},
+
+  comentarioSQLMedio: () => { return new RegExp(rgxExpresiones.comentarioSQLMedio1.source
+                                                +  rgxExpresiones.comentarioSQLMedio2.source, 
+                                                  (rgxExpresiones.comentarioSQLMedio1.global ? 'g' : '') 
+                                                + (rgxExpresiones.comentarioSQLMedio1.ignoreCase ? 'i' : '')
+                                                + (rgxExpresiones.comentarioSQLMedio1.multiline ? 'm' : '')
+                                              )
+                                          },
+
   contenidoCampo: campo => { return new RegExp(`(?<=^${campo}\\=).*`, `gm`)},
-  espaciosEntrePalabras: () => {return jsonRegEx.espaciosEntrePalabras1.source
-                            + jsonRegEx.espaciosEntrePalabras2.source,
-                              (jsonRegEx.espaciosEntrePalabras1.global ? 'g' : '') 
-                            + (jsonRegEx.espaciosEntrePalabras1.ignoreCase ? 'i' : '')
-                            + (jsonRegEx.espaciosEntrePalabras1.multiline ? 'm' : '')},
-  extraerCmpPorNom:   nomCmt => { return new RegExp(`^\\[(.*?|)${nomCmt}[^]*?(?=\\[)`, `gim`)},
-  witchNolock: () => { return new RegExp(jsonRegEx.withNolock1.source
-                            + jsonRegEx.withNolock2.source,
-                              (jsonRegEx.withNolock1.global ? 'g' : '') 
-                            + (jsonRegEx.withNolock1.ignoreCase ? 'i' : '')
-                            + (jsonRegEx.withNolock1.multiline ? 'm' : ''))}
+
+  deInicioAFin: (textoInicio, textoFin) => { return new RegExp (`${
+                                              rgxPreparacion.prepararRegEx(
+                                                  textoInicio
+                                              )}[^]*${rgxPreparacion.prepararRegEx(
+                                                  textoFin
+                                              ).replace(/\\s$/, '')}`, ``)
+                                           },
+
+  espaciosEntrePalabras: () => {return new RegExp(   rgxExpresiones.espaciosEntrePalabras1.source
+                                                  +  rgxExpresiones.espaciosEntrePalabras2.source,
+                                                    (rgxExpresiones.espaciosEntrePalabras1.global ? 'g' : '') 
+                                                  + (rgxExpresiones.espaciosEntrePalabras1.ignoreCase ? 'i' : '')
+                                                  + (rgxExpresiones.espaciosEntrePalabras1.multiline ? 'm' : '')
+                                                 )
+                                  },
+
+  extraerCmpPorNom: nomCmt => { return new RegExp(`^\\[(.*?|)${nomCmt}[^]*?(?=\\[)`, `gim`)},
+
+  witchNolock: () => { return new RegExp(    rgxExpresiones.withNolock1.source
+                                          +  rgxExpresiones.withNolock2.source,
+                                            (rgxExpresiones.withNolock1.global ? 'g' : '')
+                                          + (rgxExpresiones.withNolock1.ignoreCase ? 'i' : '')
+                                          + (rgxExpresiones.withNolock1.multiline ? 'm' : '')
+                                        )
+                                  }
 }
 
-const rgxReplace = {
-  addEspacioCmp: texto => { return texto.replace(/^\[/gm, ' \n[')},
-  addTabContenidoCmp:   texto => { return texto.replace(jsonRegEx.iniLineLetra, '\t')},
-  crearNomenclaturaEsp: texto =>  { return texto.replace(
-                                                  regEx.expresiones.puntoExtension,
-                                                  '_'
-                                                )
-                                  },
-  clsCampoIntlsYContinua: campoIntls => { return campoIntls.replace(
-                                              jsonRegEx.campoIntlsYcontinua,
-                                              '')
-                                            },
-  clsComentariosIntls: texto => { return texto.replace(
-                                                jsonRegEx.comentariosLineaIntls,
-                                              '')
-                                     },
-  clsComentariosSQL: texto => {
-                        texto = texto.replace(jsonRegEx.comentarioSQLVacio, '')
-                        texto = texto.replace(jsonRegEx.comentarioSQLSencillo, '')
+
+const rgxCls = {
+  clsBloqueTexto: (contenidoOriginal, bloqueTxtEliminar) => {
+      return  contenidoOriginal.replace(
+                  rgxCrear.deInicioAFin(
+                      rgxExtractor.extrarPrimerasDosLineas(bloqueTxtEliminar),
+                      rgxExtractor.extraerUltimasDosLineas(bloqueTxtEliminar)
+                  ),
+                  ''
+              )
+  },
+
+  clsComentariosSQL:  texto => {
+                        texto = texto.replace(rgxExpresiones.comentarioSQLVacio, '')
+                        texto = texto.replace(rgxExpresiones.comentarioSQLSencillo, '')
                         texto = texto.replace(rgxCrear.comentarioSQLMedio(), '')
-                        texto = texto.replace(jsonRegEx.comentarioSQLAvanzado, '')
-                        texto = texto.replace(jsonRegEx.comentarioSQLDobleGuion, '')
+                        texto = texto.replace(rgxExpresiones.comentarioSQLAvanzado, '')
+                        texto = texto.replace(rgxExpresiones.comentarioSQLDobleGuion, '')
                         return texto
                       },
-  clsIniCorcheteVacio: texto => { return texto.replace(
-                                                jsonRegEx.iniCorcheteLineaVacia,
-                                              '')
-                                     },
-  clsPoliticas: texto => { 
+
+  clsCampoIntlsYContinua: campoIntls => { return campoIntls.replace(rgxExpresiones.campoIntlsYcontinua, '')},
+
+  clsComentariosIntls: texto => { return texto.replace(rgxExpresiones.comentariosLineaIntls, '')},
+
+  clsComentariosSQL: texto => {
+      texto = texto.replace(rgxExpresiones.comentarioSQLVacio, '')
+      texto = texto.replace(rgxExpresiones.comentarioSQLSencillo, '')
+      texto = texto.replace(rgxCrear.comentarioSQLMedio(), '')
+      texto = texto.replace(rgxExpresiones.comentarioSQLAvanzado, '')
+      texto = texto.replace(rgxExpresiones.comentarioSQLDobleGuion, '')
+      return texto
+  },
+
+  clsEspacioEntrePalabras:  texto => { return texto.replace(rgxExpresiones.espaciosEntrePalabrasOtimizada, ' ')},
+
+  clsIniCorcheteLineaVacia: texto => { return texto.replace(rgxExpresiones.iniCorcheteLineaVacia, '')},
+
+  clsEspacioEntrePalabras:  texto => { return texto.replace(rgxExpresiones.espaciosEntrePalabrasOtimizada, ' ')},
+
+  clsPoliticas: texto => {
       texto = texto.replace(rgxCrear.ansis(), '')
       return texto.replace(rgxCrear.witchNolock(), '')
   },
-  clsRuta: ruta  => { return ruta.replace(jsonRegEx.nombreArchivoEnRuta, '')},
-  clsSaltoLineaVacio: texto => { return texto.replace(
-                                                jsonRegEx.saltoLineaVacio, 
-                                              '')
-                               },
+
   clsTextoBasura: texto => {
-    texto = texto.replace(jsonRegEx.saltoLineaVacio, '')
-    texto = texto.replace(jsonRegEx.tabulador, ' ')
-    texto = texto.replace(rgxCrear.espaciosEntrePalabras(), '')
-    texto = texto.replace(jsonRegEx.ampersand, '')
-    return texto
+      texto = texto.replace(rgxExpresiones.saltoLineaVacio, '')
+      texto = texto.replace(rgxExpresiones.tabulador, ' ')
+      texto = texto.replace(rgxExpresiones.espaciosEntrePalabras(), '')
+      texto = texto.replace(rgxExpresiones.ampersand, '')
+      return texto
   },
-  dosPuntosPorIgual: texto => { return texto.replace(/=/g, ':')},
-  extraerNomTipoEsp: ruta => { return ruta.replace( jsonRegEx.nomYtipoEsp, '')},
-  minusculasPorMayuscula: texto => { return texto.replace(
-                                              jsonRegEx.puntoExtension,
-                                              archivoFrm => {
-                                                return archivoFrm.toLowerCase()
-                                              }
-                                            )
-                                   },
-  prepararObjeto: texto => {
-    texto = texto.replace(/=/g, ':').replace(/\[.*?(?=\/)|\]/g, '')
-    texto = texto.replace(/(?<=\/\w+)\./g, ':').replace(/\//, '')
-    texto = texto.replace(/[^\w:,\.]/gm, "").replace(/,/g, ', ')
-    return texto
-  },
-  prepararRegEx: texto => {
-    texto = texto.replace(/\[/g,   '\\[').replace(/\]/g, '\\]')
-    texto = texto.replace(/\(/g,   '\\(').replace(/\)/g, '\\)')
-    texto = texto.replace(/\{/g,   '\\{').replace(/\}/g, '\\}')
-    texto = texto.replace(/\(\?/g, '\\(\\?')
-    texto = texto.replace(/\+/g,   '\\+')
-    texto = texto.replace(/\n/g,   '\\n')
-    texto = texto.replace(/\s/g,   '\\s')
-    texto = texto.replace(/\*/g,   '\\*')
-    texto = texto.replace(/\\/g,   '\\')
-    texto = texto.replace(/\$/g,   '\\$')
-    texto = texto.replace(/\./g,   '\\.')
-    return texto
-  },
-  puntoPorGuionBajoTipoEsp: nomTipoEsp => { return  nomTipoEsp.replace(
-                                                      jsonRegEx.guionBajoTipoEsp, '.'
-                                                    )
-                                          },
-  saltoLineaPorComaEspacio: texto => { return texto.replace(
-                                                      jsonRegEx.saltoLinea,
-                                                      ', '
-                                              )
-                                     }
+
+  clsRuta: ruta  => { return ruta.replace(rgxExpresiones.nomArchivoEnRuta, '')},
+
+  clsSaltoLineaVacio: texto => { return texto.replace(rgxExpresiones.saltoLineaVacio, '') },
 }
 
-module.exports.expresiones = jsonRegEx
-module.exports.crearRegEx =  rgxCrear
-module.exports.jsonReplace = rgxReplace
+const rgxExpresiones = {
+  ampersand: /\&/g, //=> &
+
+  ansis1: /SET(|[\s]+)ANSI(|[\s]+|\_)NULLS(|[\s]+)(ON|OFF)|SET/gi, //=> SET ANSI_NULLS
+
+  ansis2: /(|[\s]+)QUOTED(|[\s]+|\_)IDENTIFIER(|[\s]+)(ON|OFF)/, //=> SET ANSI_NULLS
+
+  comentariosLineaIntls:   /^;.*/gm, //=> ;Comentario
+
+  comentarioSQLAvanzado:   /\/(\*+)([^*]*)(|[*]+|(([*]+[^*]+)*?))(\*+)\//g, /*mucho*/
+
+  comentarioSQLDobleGuion: /(\-\-+).*/gm, //=> //comentario
+
+  comentarioSQLMedio1:  /\/(\*+)(|\n+.*)(|[^*]*)/g, /* mas o menos contenido*/
+
+  comentarioSQLMedio2: /(|(?:\*(?!)(|[^*]*)(|[*]+[^*]+))*?)\*+\//, /* mas o menos*/
+
+  comentarioSQLSencillo: /\/\*+([^/]*)\*+\//g, /* comentario linea */
+
+  comentarioSQLVacio:    /\/\*+\*+\//g, //=> /**/
+
+  campoConsecutivoIntls: /^\w+\d{3}/m, //=> Campo002, SQL002
+  //Falta probar
+  nuevoComponentesIntls: /\[[\W\w]*(?=^\[)|\[[^]*$/gm, //=> [Componente] contenidoComponente [
+
+  componentesIntls:    /^\[[\W\w]*?(?=(^\[))/g, //=> [Componente] contenidoCmp [
+
+  campoIntlsYcontinua: /^.*?\=<CONTINUA>|<CONTINUA>/gm, //=> SQL002=<CONTINUA>algo
+
+  contenidoComponente: /(?<=\[.*\])[^]*?(?=\[(?!\]))/g, //=> Sin [nom] extrae hasta [
+
+  continuaInicio: /(?<=^.*?\=)<CONTINUA>/m, //=> SQL002= <CONTINUA> Algo
+
+  continuaFinal:    /(?<=.*?)\<CONTINUA\>(\s+|)$/, //=> SQL= Algo <CONTINUA>
+
+  espaciosEntrePalabras1: /(?=\s(\@|\(|\=|\<|\>|\[|\]|\*|\.|\&|\,|\'|\-|\,\@))/gm,
+
+  espaciosEntrePalabras2: /((?=\s(\]\(|\#|\=\@|\(\@|\/|\+|\s\w+\+|\w+)))|((?=\n)|\s)/,
+
+  espaciosEntrePalabrasOtimizada: /(?<!\s)(?<=([\w]+|[\W]+)(?!\r\n))\s+(?=([\w]+|[\W]+))/g, //=> espacios'  'entre texto
+
+  guionBajoTipoEsp: /\_(?=(frm|vis|tbl|dlg|rep))/gi, //=> Achivo_FRM
+
+  iniCorcheteLineaVacia: /^\[$/m, //=> [
+
+  iniLineLetra: /^(?=\w)/gm, //=> "ola" no toma "[ola]"
+
+  lineasBlancas: /^\n[\s\t]*/gm, //=> \n \t \s Tabulador, Espacios o Salto de linea en blanco
+
+  nomAccion: /(?!\[\])\[.*?\]/g, //=> [ActivoFijo.tbl/FechaEmision] ang
+
+  nomArchivoEnRuta: /.*\\|.*\//, //=> Busca 'c:/' hasta 'Nombre Archivo.txt'
+
+  nomComponente: /(?<=^\[)\w*\.(tbl|vis|frm|rep|dlg)(?=\/)/gm, //=> NomComponente.frm
+
+  nomExtCmp:   /(?<=\[).*?\.(frm|vis|tbl|dlg|rep)/gi, //=> Si ^[ extrae Componente.frm
+
+  nomYtipoEsp: /.*(\/|\\)|\_MAVI.*|\.esp/gi, //De: \File_FRM_MAVI.esp Busca File_FRM
+
+  //parentesisAnidados: /(\((?>[^()]+|(?1))*\))/gm,
+
+  puntoExtension:   /\.(?=\w+$)/gim, //=> De: Achivo.FRM Busca .FRM
+
+  saltoLineaVacio:  /^\n[\s\t]*/gm, //=> \n\s\t Lineas vacias espacios y tabulador
+
+  tabulador:  /\t/mg, //=> \t
+
+  tituloComponente: /^\[.*\]/gm, //=> [ActivoFijo.tbl/FechaEmision] btw
+
+  tipoEspEnNomenclatura: /(?<=\_)\w+(?=\_)/gi, //=> _FRM_
+
+  withNolock1: /(\s+|\n+|\s+\n+)with(|\s+|\n+|\s+\n+)\((|\s+|\n+|\s+\n+)/gim, //=> With
+
+  withNolock2: /(rowlock|nolock)(|\s+|\n+|\s+\n+)\)///=> With (rowlock|nolock)
+}
+
+const rgxExtractor = {
+  extraerNomTipoEsp:      ruta  => { return ruta.replace(rgxExpresiones.nomYtipoEsp, '')},
+
+  extraerPrimerasDosLineas:  texto => { return texto.match(/.*?\r\n.*?\r\n/).join('')},
+
+  extraerPrimeraLinea:       texto => { return texto.match(/.*/).join('')},
+
+  extraerUltimasDosLineas:   texto => {
+    let lineaFinal = texto.replace(/^\s\n/gm, '').split('\r\n')
+    return  lineaFinal[lineaFinal.length-2] + '\r\n'
+          + lineaFinal[lineaFinal.length-1]
+  },
+
+  extraerUltimaLinea:  texto => {
+    let lineaFinal = texto.replace(/^\s\n/gm, '').split('\r\n')
+    return lineaFinal[lineaFinal.length-1]
+  }
+}
+
+const rgxPreparacion = {
+  prepararObjeto: texto => {
+      texto = texto.replace(/=/g, ':').replace(/\[.*?(?=\/)|\]/g, '')
+      texto = texto.replace(/(?<=\/\w+)\./g, ':').replace(/\//, '')
+      texto = texto.replace(/[^\w:,\.]/gm, "").replace(/,/g, ', ')
+      return texto
+  },
+
+  prepararRegEx: texto => {
+      texto = texto.replace(/\[/g,   '\\[').replace(/\]/g, '\\]')
+      texto = texto.replace(/\(/g,   '\\(').replace(/\)/g, '\\)')
+      texto = texto.replace(/\{/g,   '\\{').replace(/\}/g, '\\}')
+      texto = texto.replace(/\(\?/g, '\\(\\?')
+      texto = texto.replace(/\+/g,   '\\+')
+      texto = texto.replace(/\n/g,   '\\n')
+      texto = texto.replace(/\s/g,   '\\s')
+      texto = texto.replace(/\*/g,   '\\*')
+      texto = texto.replace(/\\/g,   '\\')
+      texto = texto.replace(/\$/g,   '\\$')
+      texto = texto.replace(/\./g,   '\\.')
+      return texto
+  }
+}
+
+const rgxReplace = {
+  dosPuntosPorIgual: texto => { return texto.replace(/=/g, ':')},
+
+  puntoPorGuionBajoTipoEsp: nombreTipoEsp => { return nombreTipoEsp.replace(rgxExpresiones.guionBajoTipoEsp, '.')},
+
+  minusculasPorMayuscula: texto => { return texto.replace(
+      rgxExpresiones.puntoExtension,
+      archivoFrm => {
+        return archivoFrm.toLowerCase()
+      }
+    )
+  },
+
+  remplazarBloqueTextoPorOtro: (contenidoOriginal, contenidoARemplazar, contenidoParaRemplazo) => {
+      return  contenidoOriginal.replace(
+              rgxCrear.deInicioAFin(
+                  rgxExtractor.extrarPrimerasDosLineas(contenidoARemplazar),
+                  rgxExtractor.extraerUltimasDosLineas(contenidoARemplazar)
+              ),
+              contenidoParaRemplazo
+              )
+  },
+
+  saltoLineaPorComaEspacio: texto => { return texto.replace(rgxExpresiones.saltoLineaVacio,', ')}
+}
+
+module.exports.Agregar     = rgxAgregar
+module.exports.Borrar      = rgxCls
+module.exports.Crear       = rgxCrear
+module.exports.Expresiones = rgxExpresiones
+module.exports.Extraer     = rgxExtractor
+module.exports.Preparar    = rgxPreparacion
+module.exports.Remplazar   = rgxReplace

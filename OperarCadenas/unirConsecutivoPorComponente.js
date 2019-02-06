@@ -1,23 +1,25 @@
 /*** Operadores de cadena ***/
-const organizar     = require('./ordenarCampos')
-const unir          = require('./unirConsecutivos')
+const { extraerOrdenarCampos } = require('./ordenarCampos')
+const { remplazarContenido } = require('./remplazarContenido')
+const regEx = require('../RegEx/jsonRgx')
+const { unificarCamposConsecutivos } = require('./unirConsecutivos')
 
-/*** 
+/***
  * Une los campos consecutivos de un componente Intelisis
  * @componente Componente Intelisis con campos consecutivos
 ***/
-exports.camposComponente = componente => {
-    let camposOrdenados = organizar.extraerOrdenarCampos(componente)
+const ordenarUnirCampos = componente => {
+    let camposOrdenados = extraerOrdenarCampos(componente)
     let camposUnificados = []
-
+    
     for (contenido in camposOrdenados.contenidoOrdenado){
-        camposUnificados.push(unir.unificarCamposConsecutivos(
+        camposUnificados.push(unificarCamposConsecutivos(
             camposOrdenados.contenidoOrdenado[contenido])
         )
     }
-
+    
     for (campoD in camposOrdenados.campoConDigito) {
-
+        
         componente = componente.replace(
             camposOrdenados.campoConDigito[campoD], ''
         )
@@ -33,5 +35,35 @@ exports.camposComponente = componente => {
             }
         }
     }
+
     return componente
+}
+
+exports.unirCamposConsecutivosComponente = (contenidoArchivo) => {
+    let contenidoModificado = contenidoArchivo
+    contenidoModificado = regEx.Borrar.clsComentariosIntls(contenidoModificado)
+
+    let componentesArchivo = contenidoModificado.match(
+        regEx.Expresiones.componentesIntlsOptimizado
+    )
+
+    for (componente in componentesArchivo) {
+
+        if (regEx.Expresiones.campoConsecutivoIntls.test(componentesArchivo[componente])) {
+
+            contenidoArchivo = remplazarContenido(contenidoArchivo,
+                componentesArchivo[componente],
+                ordenarUnirCampos(
+                    componentesArchivo[componente]
+                )
+            )
+        }
+    }
+
+    contenidoArchivo = regEx.Borrar.clsIniCorcheteLineaVacia(contenidoArchivo)
+    contenidoArchivo = regEx.Borrar.clsEspacioEntrePalabras(contenidoArchivo)
+    contenidoArchivo = regEx.Borrar.clsSaltoLineaVacio(contenidoArchivo)
+    contenidoArchivo = regEx.Agregar.addEspacioCmp(contenidoArchivo)
+
+    return contenidoArchivo
 }

@@ -11,23 +11,23 @@ exports.unificarCamposConsecutivos = campos => {
     let cadenaCamposContinuos = ''
   
     for (key in arregloCampos) {
-
         if (key == 0){
 
-            if (regEx.expresiones.continuaFinal.test(arregloCampos[key])) {
-                cadenaCamposContinuos += arregloCampos[key].replace(regEx.expresiones.continuaFinal, '')
+            if (regEx.Expresiones.continuaFinal.test(arregloCampos[key])) {
+                cadenaCamposContinuos += arregloCampos[key].replace(regEx.Expresiones.continuaFinal, '')
             } else {
                 cadenaCamposContinuos = arregloCampos[key]
             }
         } else {
 
-            if (regEx.expresiones.continuaFinal.test(arregloCampos[key-1])) {
+            if (regEx.Expresiones.continuaFinal.test(arregloCampos[key-1])) {
 
-                if (regEx.expresiones.continuaAlInicio.test(arregloCampos[key])) {
-                    cadenaCamposContinuos += arregloCampos[key].replace(regEx.expresiones.campoYcontinua, '')
+                if (regEx.Expresiones.continuaInicio.test(arregloCampos[key])) {
+                    cadenaCamposContinuos += arregloCampos[key].replace(regEx.Expresiones.campoIntlsYcontinua, '')
                 }
             }
         }
     }
+
     return cadenaCamposContinuos
 }
