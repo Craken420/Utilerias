@@ -17,8 +17,8 @@ function extraerContenidoAcceso (acceso, expresionAcceso, texto) {
 }
 
 function crearExpresion (texto) {
-    let expresionAcceso =  new RegExp(`^\\[(.*?|)${regEx.jsonReplace.prepararRegEx(texto)}[^*]*?(?=^\\[)`, `gm`)
-    let expresionVariables =  new RegExp(`^\\[${regEx.jsonReplace.prepararRegEx(texto)}\\][^~]*?(?=^\\[)`, `gm`)
+    let expresionAcceso =  new RegExp(`^\\[(.*?|)${regEx.Preparar.prepararRegEx(texto)}[^*]*?(?=^\\[)`, `gm`)
+    let expresionVariables =  new RegExp(`^\\[${regEx.Preparar.prepararRegEx(texto)}\\][^~]*?(?=^\\[)`, `gm`)
     //console.log('expresionAcceso',expresionAcceso)
     return {
         expresionAcceso: expresionAcceso,
@@ -28,7 +28,7 @@ function crearExpresion (texto) {
 
 exports.extraerAcceso =  function (acceso, texto) {
     texto = texto + '\n['
-    texto = regEx.jsonReplace.clsComentariosIntls(texto)
+    texto = regEx.Borrar.clsComentariosIntls(texto)
     
     let extraccionReducida = ''
         //console.log('Acceso',acceso)

@@ -45,8 +45,6 @@ const rgxCrear = {
                                               ).replace(/\\s$/, '')}`, ``)
                                            },
 
-  extraerCmpPorNom: nomCmt => { return new RegExp(`^\\[(.*?|)${nomCmt}[^]*?(?=\\[)`, `gim`)},
-
   witchNolock: () => { return new RegExp(    rgxExpresiones.withNolock1.source
                                           +  rgxExpresiones.withNolock2.source,
                                             (rgxExpresiones.withNolock1.global ? 'g' : '')
@@ -184,6 +182,8 @@ const rgxExpresiones = {
 }
 
 const rgxExtractor = {
+  extraerCmpPorNom: nomCmt => { return new RegExp(`^\\[(.*?|)${nomCmt}[^]*?(?=\\[)`, `gim`)},
+
   extraerNomTipoEsp:      ruta  => { return ruta.replace(rgxExpresiones.nomYtipoEsp, '')},
 
   extraerPrimerasDosLineas:  texto => { return texto.match(/.*?\r\n.*?\r\n/).join('')},
