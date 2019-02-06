@@ -44,7 +44,7 @@ exports.unirCamposConsecutivosComponente = (contenidoArchivo) => {
     contenidoModificado = regEx.Borrar.clsComentariosIntls(contenidoModificado)
 
     let componentesArchivo = contenidoModificado.match(
-        regEx.Expresiones.componentesIntlsOptimizado
+        regEx.Expresiones.componentesIntls
     )
 
     for (componente in componentesArchivo) {
