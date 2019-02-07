@@ -26,8 +26,8 @@ const { crearObjCamposCmp } = require('./crearObjCamposCmp')
  ***/
 const extraerMonoComponentesCampos = (arregloCamposBusqueda, arregloNomCmps, texto) => {
     texto = texto + '\n['
-    texto = texto.replace(regEx.Expresiones.ampersand, '')
-    texto = texto.replace(regEx.Expresiones.comentariosLineaIntls, '')
+    texto = texto.replace(regEx.expresiones.ampersand, '')
+    texto = texto.replace(regEx.expresiones.comentariosLineaIntls, '')
 
     let objComponentesCampos = {}
 
