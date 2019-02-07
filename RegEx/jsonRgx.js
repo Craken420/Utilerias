@@ -156,7 +156,7 @@ const rgxExpresiones = {
 
   espaciosEntrePalabras2: /((?=\s(\]\(|\#|\=\@|\(\@|\/|\+|\s\w+\+|\w+)))|((?=\n)|\s)/,
 
-  espaciosEntrePalabras: /(?<=[^\s])(?!\n)\s+(?=[^\s])(?!\n)/g, //=> espacios'  'entre texto
+  espaciosEntrePalabras: /(?<!\s)(?<=([\w]+|[\W]+)(?!\r\n))\s+(?=([\w]+|[\W]+))/g, //=> espacios'  'entre texto
 
   guionBajoTipoEsp: /\_(?=(frm|vis|tbl|dlg|rep))/gi, //=> Achivo_FRM
 
