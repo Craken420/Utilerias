@@ -15,14 +15,14 @@ const opObj = require('./eliminarDuplicado')
  ***/
 exports.crearObjCamposCmp = (arregloCamposBusqueda, nomComponente, texto) => {
 
-    let expresionCmpPorNom = regEx.crearRegEx.extraerCmpPorNom(nomComponente)
+    let expresionCmpPorNom = regEx.Crear.extraerCmpPorNom(nomComponente)
 
     if (expresionCmpPorNom.test(texto)) {
 
         let objCampo = {}
         
         let objCampos = arregloCamposBusqueda.map(campo => {
-            if (regEx.crearRegEx.contenidoCampo(campo).test(
+            if (regEx.Crear.contenidoCampo(campo).test(
                                                             texto.match(
                                                                 expresionCmpPorNom
                                                             ).join('')
@@ -30,7 +30,7 @@ exports.crearObjCamposCmp = (arregloCamposBusqueda, nomComponente, texto) => {
                 objCampo[campo] = texto.match(
                                         expresionCmpPorNom
                                     ).join('').match(
-                                        regEx.crearRegEx.contenidoCampo(campo)
+                                        regEx.Crear.contenidoCampo(campo)
                                     ).join('')
             }
             return objCampo
