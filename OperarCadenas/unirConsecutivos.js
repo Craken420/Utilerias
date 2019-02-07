@@ -9,12 +9,13 @@ let regEx = require('../RegEx/jsonRgx')
 exports.unificarCamposConsecutivos = campos => {
     let arregloCampos = campos.split('\n')
     let cadenaCamposContinuos = ''
-  
+
     for (key in arregloCampos) {
         if (key == 0){
 
             if (regEx.Expresiones.continuaFinal.test(arregloCampos[key])) {
                 cadenaCamposContinuos += arregloCampos[key].replace(regEx.Expresiones.continuaFinal, '')
+                
             } else {
                 cadenaCamposContinuos = arregloCampos[key]
             }
@@ -23,6 +24,7 @@ exports.unificarCamposConsecutivos = campos => {
             if (regEx.Expresiones.continuaFinal.test(arregloCampos[key-1])) {
 
                 if (regEx.Expresiones.continuaInicio.test(arregloCampos[key])) {
+
                     cadenaCamposContinuos += arregloCampos[key].replace(regEx.Expresiones.campoIntlsYcontinua, '')
                 }
             }

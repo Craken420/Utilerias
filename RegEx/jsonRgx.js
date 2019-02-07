@@ -17,7 +17,6 @@ const rgxCrear = {
                               },
 
   campoSinDigito: tipoCampo => { return new RegExp(`^${tipoCampo}\\=.*`, `gim`)},
-
   campoConDigito: tipoCampo => { return  new RegExp(`^${tipoCampo}\\d{3}\\=.*`, `gim`)},
 
   campoConSinDigito: tipoCampo => { return  new RegExp(`^${tipoCampo}(\\d{3}|)\\=.*`,`gim`)},

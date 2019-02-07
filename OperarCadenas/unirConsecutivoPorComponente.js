@@ -11,15 +11,15 @@ const { unificarCamposConsecutivos } = require('./unirConsecutivos')
 const ordenarUnirCampos = componente => {
     let camposOrdenados = extraerOrdenarCampos(componente)
     let camposUnificados = []
-    
+
     for (contenido in camposOrdenados.contenidoOrdenado){
         camposUnificados.push(unificarCamposConsecutivos(
             camposOrdenados.contenidoOrdenado[contenido])
         )
     }
-    
+
     for (campoD in camposOrdenados.campoConDigito) {
-        
+
         componente = componente.replace(
             camposOrdenados.campoConDigito[campoD], ''
         )

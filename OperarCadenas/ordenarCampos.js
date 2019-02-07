@@ -1,6 +1,8 @@
 /*** Archivos ***/
 const arrCampos = require('../Archivos/arregloCamposIntelisis')
 
+const sinDuplicado = require('../OperadorObjetos/eliminarDuplicado')
+
 /*** Operadores de cadena ***/
 const regEx = require('../RegEx/jsonRgx')
 
@@ -15,9 +17,8 @@ const ordenar = (texto, contenidoCamposConSinDigito,
                  campoSinDigito, campoConDigito) => {
 
     return  texto.match(campoSinDigito).join('\n') + 
-             '\n' + contenidoCamposConSinDigito.match(
-                        campoConDigito
-                    ).sort().join('\n')
+         '\n' + sinDuplicado.camposConsecutivosIntlsSinDuplicado(
+                contenidoCamposConSinDigito.match(campoConDigito)).sort().join('\n')
 }
 
 /***
@@ -50,19 +51,21 @@ exports.extraerOrdenarCampos = (contenidoArchivo) => {
     let campoSinDigito    = []
     let contenidoOrdenado = []
     let expresiones       = []
-    let campos = arrCampos.arregloCampos
 
-    for (campo in campos) {
+    for (campo in arrCampos.arregloCampos) {
 
-        expresiones.push(crearExpresionesCampos(campos[campo]))
+        expresiones.push(crearExpresionesCampos(arrCampos.arregloCampos[campo]))
     }
     for(expresion in expresiones) {
 
         if (expresiones[expresion].campoConDigito.test(contenidoArchivo)) {
 
+            campoConDigito.push(expresiones[expresion].campoConDigito)
+            campoSinDigito.push(expresiones[expresion].campoSinDigito)
+
             contenidoOrdenado.push(
                 ordenar(
-                    contenidoArchivo, 
+                    contenidoArchivo,
                     contenidoArchivo.match(
                         expresiones[expresion].camposConSinDigito
                     ).join('\n'),
@@ -70,15 +73,12 @@ exports.extraerOrdenarCampos = (contenidoArchivo) => {
                     expresiones[expresion].campoConDigito
                 )
             )
-
-            campoConDigito.push(expresiones[expresion].campoConDigito)
-            campoSinDigito.push(expresiones[expresion].campoSinDigito)
         }
     }
 
     return {
         campoConDigito: campoConDigito,
         campoSinDigito: campoSinDigito,
-        contenidoOrdenado: contenidoOrdenado,
+        contenidoOrdenado: contenidoOrdenado
     }
 }
