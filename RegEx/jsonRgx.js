@@ -16,7 +16,14 @@ const rgxCrear = {
                                   )
                               },
 
+  espaciosEntrePalabras: () => {return new RegExp(rgxExpresiones.espaciosEntrePalabras1.source
+                                    +  rgxExpresiones.espaciosEntrePalabras2.source,
+                                      (rgxExpresiones.espaciosEntrePalabras1.global ? 'g' : '') 
+                                    + (rgxExpresiones.espaciosEntrePalabras1.ignoreCase ? 'i' : '')
+                                    + (rgxExpresiones.espaciosEntrePalabras1.multiline ? 'm' : ''))},
+
   campoSinDigito: tipoCampo => { return new RegExp(`^${tipoCampo}\\=.*`, `gim`)},
+
   campoConDigito: tipoCampo => { return  new RegExp(`^${tipoCampo}\\d{3}\\=.*`, `gim`)},
 
   campoConSinDigito: tipoCampo => { return  new RegExp(`^${tipoCampo}(\\d{3}|)\\=.*`,`gim`)},
@@ -143,9 +150,13 @@ const rgxExpresiones = {
 
   continuaInicio: /(?<=^.*?\=)<CONTINUA>/m, //=> SQL002= <CONTINUA> Algo
 
-  continuaFinal:    /(?<=.*?)\<CONTINUA\>(\s+|)$/, //=> SQL= Algo <CONTINUA>
+  continuaFinal: /(?<=.*?)\<CONTINUA\>(\s+|)$/, //=> SQL= Algo <CONTINUA>
 
-  espaciosEntrePalabras: /(?<!\s)(?<=([\w]+|[\W]+)(?!\r\n))\s+(?=([\w]+|[\W]+))/g, //=> espacios'  'entre texto
+  espaciosEntrePalabras1: /(?=\s(\@|\(|\=|\<|\>|\[|\]|\*|\.|\&|\,|\'|\-|\,\@))/gm,
+
+  espaciosEntrePalabras2: /((?=\s(\]\(|\#|\=\@|\(\@|\/|\+|\s\w+\+|\w+)))|((?=\n)|\s)/,
+
+  espaciosEntrePalabras: /(?<=[^\s])(?!\n)\s+(?=[^\s])(?!\n)/g, //=> espacios'  'entre texto
 
   guionBajoTipoEsp: /\_(?=(frm|vis|tbl|dlg|rep))/gi, //=> Achivo_FRM
 

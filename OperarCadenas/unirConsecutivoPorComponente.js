@@ -61,7 +61,6 @@ exports.unirCamposConsecutivosComponente = (contenidoArchivo) => {
     }
 
     contenidoArchivo = regEx.Borrar.clsIniCorcheteLineaVacia(contenidoArchivo)
-    contenidoArchivo = regEx.Borrar.clsEspacioEntrePalabras(contenidoArchivo)
     contenidoArchivo = regEx.Borrar.clsSaltoLineaVacio(contenidoArchivo)
     contenidoArchivo = regEx.Agregar.addEspacioCmp(contenidoArchivo)
 
