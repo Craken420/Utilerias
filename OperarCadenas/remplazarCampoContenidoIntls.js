@@ -133,6 +133,22 @@ function remplazarCampoContenidoIntls (archivo, conCondicion, condicionCampo,
     }
 }
 
+function denpendedor (archivo, conCondicion, condicionCampo,
+    nomCampo, nomCmp, nuevoContenidoCampo) {
+
+    console.log(arguments.callee.arguments.archivo)
+
+    let contenidoArchivo = extraerContenidoRecodificado(archivo)
+
+    if (validarParametrosVacios(arguments) != true) {
+
+
+    } else {
+        console.log('Existe un parametro vacio')
+        return contenidoArchivo
+    }
+}
+
 module.exports.remplazarCampoSinCondicionContenidoCmp = remplazarCampoSinCondicionContenidoCmp
 module.exports.remplazarCampoConCondicionContenidoCmp = remplazarCampoConCondicionContenidoCmp
 module.exports.remplazarCampoContenidoIntls = remplazarCampoContenidoIntls
