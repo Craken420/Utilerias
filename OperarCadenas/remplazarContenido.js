@@ -11,12 +11,17 @@ const regEx = require('../RegEx/jsonRgx')
 exports.remplazarContenido =  ( contenidoOriginal, contenidoARemplazar,
                                 contenidoParaRemplazo) => {
 
-    let primerasDosLineas = regEx.Extraer.extraerPrimerasDosLineas(contenidoARemplazar)
-    let ultimasDosLineas  = regEx.Extraer.extraerUltimasDosLineas(contenidoARemplazar)
+    if (/(.*?\n){4,}/.test(contenidoARemplazar)) {
+        let primerasDosLineas = regEx.Extraer.extraerPrimerasDosLineas(contenidoARemplazar)
+        let ultimasDosLineas  = regEx.Extraer.extraerUltimasDosLineas(contenidoARemplazar)
 
-    return  contenidoOriginal.replace(
-                regEx.Crear.deInicioAFin(primerasDosLineas, ultimasDosLineas),
-                contenidoParaRemplazo
-            )
+        return  contenidoOriginal.replace(
+                    regEx.Crear.deInicioAFin(primerasDosLineas, ultimasDosLineas),
+                    contenidoParaRemplazo
+                )
+    } else {
+        return contenidoOriginal.replace(new RegExp(`${regEx.Preparar.prepararRegEx(
+            contenidoARemplazar
+        )}`, ``), contenidoParaRemplazo)
+    }
 }
-

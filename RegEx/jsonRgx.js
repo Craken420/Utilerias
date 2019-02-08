@@ -51,7 +51,7 @@ const rgxCrear = {
                                               ).replace(/\\s$/, '')}`, ``)
                                            },
 
-  extraerCmpPorNom: nomCmt => { return new RegExp(`^\\[(.*?|)${nomCmt}[^]*?(?=^\\[)|\\[[^]*$`, `gim`)},
+  extraerCmpPorNom: nomCmt => { return new RegExp(`^\\[(.*?|)${nomCmt}[^]*?(?=^\\[)`, `gim`)},
 
   witchNolock: () => { return new RegExp(    rgxExpresiones.withNolock1.source
                                           +  rgxExpresiones.withNolock2.source,
