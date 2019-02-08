@@ -9,8 +9,16 @@ const path = require('path')
  ***/
 exports.listarArchivos = (carpeta, extenciones) => {
 	let files = fs.readdirSync(carpeta)
-	if(extenciones != undefined)
-		return files.filter(x => extenciones.indexOf(path.extname(x)) > -1)
-	else 
+	if(extenciones != undefined || extenciones != null || extenciones != '') {
+
+        if (typeof extenciones == 'string') {
+
+            return archivos.filter(x => new RegExp(`${extenciones}`, ``).test(x))
+        } else {
+
+            console.log('Ingresa un arreglo o una cadena \'.extension\'')
+        }
+    } else {
 		return files
+	}
 }
