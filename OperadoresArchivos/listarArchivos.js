@@ -4,8 +4,8 @@ const path = require('path')
 
 /***
  * Función que extrae los archivos de una carpeta filtrando por extensión
- * @carpeta ruta del directorio a examinar
- * @extenciones extensiones a filtrar
+ * @carpeta ruta del directorio a examinar: 'c:\usuario\archivos'
+ * @extenciones extensiones a filtrar: ['.frm'] o '.frm'
  ***/
 exports.listarArchivos = (carpeta, extenciones) => {
 	let archivos = fs.readdirSync(carpeta)
