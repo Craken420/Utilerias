@@ -45,6 +45,7 @@ function remplazarCampoSinCondicionContenidoCmp (archivo, contenidoArchivo,
         }
 
     } else {
+
         console.log(`No existe el componente: ${nomCmp}\n`
         + `En el archivo: \"${regEx.Borrar.clsRuta(archivo)}\"`)
         return contenidoArchivo
@@ -91,7 +92,7 @@ function remplazarCampoConCondicionContenidoCmp (archivo, condicionContenido, co
 
             } else {
 
-                console.log(`--------------------------\nNo existe la plabra: \"${condicionContenido}\"`
+                console.log(`--------------------------\nNo existe la expresion: \"${condicionContenido}\"`
                     + `\nEn el campo: \"${campoContenido}\" \nDel archivo: \"${regEx.Borrar.clsRuta(archivo)}\"`)
                 return contenidoArchivo
             }
@@ -110,96 +111,143 @@ function remplazarCampoConCondicionContenidoCmp (archivo, condicionContenido, co
     }
 }
 
-function denpendedor (archivo, conCondicion, condicionForzosa, condicionCampo,
+function ejecutarCondicion (archivo, condicionForzosa, condicionCampo, contenidoArchivo,
     nomCampo, nomCmp, nuevoContenidoCampo) {
+    console.log('\n-------------------------------------')
+    console.log('Determinacion Tipo: Nombre Componente - ',determinarStringOArreglo(condicionCampo))
+    console.log('-----------------------------')
 
-    let contenidoArchivo = extraerContenidoRecodificado(archivo)
+    if (determinarStringOArreglo(condicionCampo) == 'string') {
 
-    if (conCondicion == true) {
+       
+    } else if (determinarStringOArreglo(condicionCampo) == 'arreglo') {
 
-        if (determinarStringOArreglo(condicionCampo) == 'string') {
+        console.log('\n-------------------------------------')
+        console.log('Determinacion Tipo: Condicion - ',determinarStringOArreglo(condicionCampo))
+        console.log('-----------------------------')
 
-            console.log('\n-------------------------------------')
-            console.log('Determinacion Condicion: ',determinarStringOArreglo(condicionCampo))
-            console.log('------------')
+        if (condicionForzosa == true) {
+
+            let mapReg = condicionCampo.map(x => {return `(?:${x})`})
+            let superReg = mapReg.join('([^]*|)')
+
+            console.log('condicionCampo: Forzosa')
+            console.log('-------------------------')
+            console.log('condicionCampo',condicionCampo)
+            console.log('superReg: ',superReg)
 
             return remplazarCampoConCondicionContenidoCmp(
                 archivo,
-                condicionCampo,
+                superReg,
                 contenidoArchivo,
                 nomCampo,
                 nomCmp,
                 nuevoContenidoCampo
             )
 
-        } else if (determinarStringOArreglo(condicionCampo) == 'arreglo') {
+        } else if (condicionForzosa == false) {
+
+            let mapReg = condicionCampo.map(x => {return `(?:${x})`})
+            let superReg = mapReg.join('|')
 
             console.log('\n-------------------------------------')
-            console.log('Determinacion Condicion: ',determinarStringOArreglo(condicionCampo))
-            console.log('-----------------------------')
+            console.log('condicionCampo Opcional')
+            console.log('------------')
+            console.log('condicionCampo: ',condicionCampo)
+            console.log('mapReg: ', mapReg)
+            console.log('superReg: ',superReg)
 
-            if (condicionForzosa == true) {
-
-                let mapReg = condicionCampo.map(x => {return `(?:${x})`})
-                let superReg = mapReg.join('([^]*|)')
-
-                console.log('condicionCampo: Forzosa')
-                console.log('-------------------------')
-                console.log('condicionCampo',condicionCampo)
-                console.log('superReg: ',superReg)
-
-                return remplazarCampoConCondicionContenidoCmp(
-                    archivo,
-                    superReg,
-                    contenidoArchivo,
-                    nomCampo,
-                    nomCmp,
-                    nuevoContenidoCampo
-                )
-
-            } else if (condicionForzosa == false) {
-
-                let mapReg = condicionCampo.map(x => {return `(?:${x})`})
-                let superReg = mapReg.join('|')
-
-                console.log('\n-------------------------------------')
-                console.log('condicionCampo Opcional')
-                console.log('------------')
-                console.log('condicionCampo: ',condicionCampo)
-                console.log('mapReg: ', mapReg)
-                console.log('superReg: ',superReg)
-
-                return remplazarCampoConCondicionContenidoCmp(
-                    archivo,
-                    superReg,
-                    contenidoArchivo,
-                    nomCampo,
-                    nomCmp,
-                    nuevoContenidoCampo
-                )
-            } else {
-                console.log('Ingresa \"true\" si necesitas una condicion en el texto, \"false\" si no')
-            }
+            return remplazarCampoConCondicionContenidoCmp(
+                archivo,
+                superReg,
+                contenidoArchivo,
+                nomCampo,
+                nomCmp,
+                nuevoContenidoCampo
+            )
         } else {
-            console.log('Objeto desconocido')
-            return contenidoArchivo
+
+            console.log('Ingresa \"true\" si necesitas una condicion en el texto, \"false\" si no')
         }
-    } else if (conCondicion == false) {
-        console.log('Remplazo sin condicion')
-        return remplazarCampoSinCondicionContenidoCmp(
-            archivo,
-            contenidoArchivo,
-            nomCampo,
-            nomCmp,
-            nuevoContenidoCampo
-        )
     } else {
-        console.log('Ingresa \"true\" si necesitas una condicion en el texto, \"false\" si no')
+
+        console.log('Objeto desconocido')
         return contenidoArchivo
     }
+}
+/***
+ * Ejemlos:
+ * denpendedor(
+                    archivo,
+                    false,
+                    false,
+                    '',
+                    'VentanaTipoMarco',
+                    'Forma',
+                    'Sensillo'
+                )
+ * Si conCondicion y condicionForzosa son false
+ * Editara todos los archivos con extension frm
+ * 
+ * denpendedor(
+                    archivo,
+                    true,
+                    false,
+                    'Normal',
+                    'VentanaTipoMarco',
+                    'Forma',
+                    'Sensillo'
+                )
+ * Si conCondicion es true y condicionForzosa son false
+ * Editara todos los archivos con extension frm que contengan el campo
+ * [Forma]
+ * 'VentanaTipoMarco=Normal lo que sea'
+ * 
+ ***/
+function denpendedor (archivo, conCondicion, condicionForzosa, condicionCampo,
+    nomCampo, nomCmp, nuevoContenidoCampo) {
+
+    let contenidoArchivo = extraerContenidoRecodificado(archivo)
+
+    //-----------------------------------------------------------------
+    if (determinarStringOArreglo(nomCmp) == 'string') {
+        if (conCondicion == true) {
+
+            ejecutarCondicion(archivo, condicionForzosa, condicionCampo,
+                contenidoArchivo, nomCampo, nomCmp, nuevoContenidoCampo)
+
+        } else if (conCondicion == false) {
+            
+            console.log('Remplazo sin condicion')
+            return remplazarCampoSinCondicionContenidoCmp(
+                archivo,
+                contenidoArchivo,
+                nomCampo,
+                nomCmp,
+                nuevoContenidoCampo
+            )
+        } else {
+            console.log('Ingresa \"true\" si necesitas una condicion en el texto, \"false\" si no')
+            return contenidoArchivo
+        }
+    }else if (determinarStringOArreglo(nomCmp) == 'arreglo') {
+        console.log('\n-------------------------------------')
+        console.log('Determinacion Nombre Componente: ',determinarStringOArreglo(condicionCampo))
+        console.log('-----------------------------')
+
+        for (key in nomCmp) {
+            ejecutarCondicion(archivo, condicionForzosa, condicionCampo,
+                contenidoArchivo, nomCampo, nomCmp[key], nuevoContenidoCampo)
+        }
+    } else {
+            console.log('Objeto desconocido')
+            return contenidoArchivo
+    }
+    //--------------------------------------------------------
+
 }
 
 module.exports.remplazarCampoSinCondicionContenidoCmp = remplazarCampoSinCondicionContenidoCmp
 module.exports.remplazarCampoConCondicionContenidoCmp = remplazarCampoConCondicionContenidoCmp
-module.exports.remplazarCampoContenidoIntls = remplazarCampoContenidoIntls
+//module.exports.remplazarCampoContenidoIntls = remplazarCampoContenidoIntls
 module.exports.denpendedor = denpendedor
