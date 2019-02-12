@@ -10,9 +10,9 @@ function listar (archivo) {
     let contenidoArchivo = extraerContenidoRecodificado(archivo)
 
     if (regEx.Crear.campoSinDigito('ListaCarpetas').test(contenidoArchivo)) {
-        
+
         lista = contenidoArchivo.match(regEx.Crear.campoSinDigito('ListaCarpetas')).join('').replace(/.*=/g, '')
-        
+
         if (/<BR>/g.test(lista)) {
 
             let newList = lista.split('<BR>')
@@ -42,7 +42,7 @@ function listar (archivo) {
             )
 
             if (respuesta != false){
-                // Mono archivo
+
                 pcrArchivos.crearArchivo(archivo, respuesta)
             }
         }
