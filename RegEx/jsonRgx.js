@@ -52,7 +52,7 @@ const rgxCrear = {
                                            },
 
   extraerCmpPorNom: nomCmt => { return new RegExp(`^\\[(.*?|)${nomCmt}[^]*?(?=^\\[)`, `gim`)},
-
+  extraerCmp: nomCmt => { return new RegExp(`^\\[${nomCmt}\\][^]*?(?=^\\[)`, `gim`)},
   witchNolock: () => { return new RegExp(    rgxExpresiones.withNolock1.source
                                           +  rgxExpresiones.withNolock2.source,
                                             (rgxExpresiones.withNolock1.global ? 'g' : '')
@@ -196,21 +196,21 @@ const rgxExpresiones = {
 const rgxExtractor = {
   extraerCampoContenido: (texto, campo) => {return texto.match(rgxCrear.campoSinDigito(campo))},
 
-  extraerCmpPorNom: (texto, nomComponente) => { return  texto.match(rgxCrear.extraerCmpPorNom(nomComponente))},
+  extraerCmpPorNom: (texto, nomCmp) => { return  texto.match(rgxCrear.extraerCmpPorNom(nomCmp))},
+  extraerCmp: (texto, nomCmp) => { return  texto.match(rgxCrear.extraerCmp(nomCmp))},
+  extraerNomTipoEsp: ruta  => { return ruta.replace(rgxExpresiones.nomYtipoEsp, '')},
 
-  extraerNomTipoEsp:      ruta  => { return ruta.replace(rgxExpresiones.nomYtipoEsp, '')},
+  extraerPrimerasDosLineas: texto => { return texto.match(/.*?\r\n.*?\r\n/).join('')},
 
-  extraerPrimerasDosLineas:  texto => { return texto.match(/.*?\r\n.*?\r\n/).join('')},
+  extraerPrimeraLinea: texto => { return texto.match(/.*/).join('')},
 
-  extraerPrimeraLinea:       texto => { return texto.match(/.*/).join('')},
-
-  extraerUltimasDosLineas:   texto => {
+  extraerUltimasDosLineas: texto => {
     let lineaFinal = texto.replace(/^\s\n/gm, '').split('\r\n')
     return  lineaFinal[lineaFinal.length-2] + '\r\n'
           + lineaFinal[lineaFinal.length-1]
   },
 
-  extraerUltimaLinea:  texto => {
+  extraerUltimaLinea: texto => {
     let lineaFinal = texto.replace(/^\s\n/gm, '').split('\r\n')
     return lineaFinal[lineaFinal.length-1]
   }

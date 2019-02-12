@@ -20,7 +20,6 @@ exports.obtenerArchivos = async carpeta => {
     return  (
               await stat(resultado)
             ).isDirectory() ? obtenerArchivos(resultado) : resultado
-
   }))
   return archivos.reduce((a, f) => a.concat(f), [])
 }

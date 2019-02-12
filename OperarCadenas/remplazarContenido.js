@@ -10,7 +10,7 @@ const regEx = require('../RegEx/jsonRgx')
  ***/
 exports.remplazarContenido =  ( contenidoOriginal, contenidoARemplazar,
                                 contenidoParaRemplazo) => {
-
+  
     if (/(.*?\n){4,}/.test(contenidoARemplazar)) {
         let primerasDosLineas = regEx.Extraer.extraerPrimerasDosLineas(contenidoARemplazar)
         let ultimasDosLineas  = regEx.Extraer.extraerUltimasDosLineas(contenidoARemplazar)

@@ -1,17 +1,18 @@
 const { extraerContenidoRecodificado } = require('../Codificacion/contenidoRecodificado')
 
 const { determinarStringOArreglo } = require('../Validaciones/esStringOArreglo')
-const { validarParametrosVacios } = require('../Validaciones/validarParametrosVacios')
-const pcrArchivos = require('../OperadoresArchivos/procesadorArchivos')
 
+const pcrArchivos = require('../OperadoresArchivos/procesadorArchivos')
 
 /*** Operadores de cadena ***/
 const regEx  = require('../RegEx/jsonRgx')
 const { remplazarContenido } = require('./remplazarContenido')
 
+
+
 function remplazarCampoSinCondicionContenidoCmp (archivo, contenidoArchivo,
                                                  nomCampo, nomCmp, nuevoContenidoCampo) {
-
+    
     let contenidoEditar = contenidoArchivo + '\n['
 
     if (regEx.Crear.extraerCmpPorNom(nomCmp).test(contenidoEditar)) {
@@ -33,7 +34,7 @@ function remplazarCampoSinCondicionContenidoCmp (archivo, contenidoArchivo,
                 console.log(`---\nCampo editado: \"${nuevoCampo}\"`)
 
                 pcrArchivos.crearArchivo(
-                    'Testing\\'+ regEx.Borrar.clsRuta(archivo),
+                    archivo,
                     remplazarContenido(contenidoArchivo, campoContenido, nuevoCampo)
                 )
 
@@ -52,6 +53,8 @@ function remplazarCampoSinCondicionContenidoCmp (archivo, contenidoArchivo,
     }
 }
 
+
+
 /***
  * 
  * Ejemplo:
@@ -63,16 +66,16 @@ function remplazarCampoSinCondicionContenidoCmp (archivo, contenidoArchivo,
                     nomCmp.- 'Forma',
                     nuevoContenidoCampo.- 'Sensillo'
  ***/
-function remplazarCampoConCondicionContenidoCmp (archivo, condicionContenido, contenidoArchivo,
+function remplazarCampoConCondicionContenidoCmp (archivo, condicionContenido,
                                                  nomCampo, nomCmp, nuevoContenidoCampo) {
-
+    let contenidoArchivo = extraerContenidoRecodificado(archivo)
     let contenidoEditar = contenidoArchivo + '\n['
-
+   
     if (regEx.Crear.extraerCmpPorNom(nomCmp).test(contenidoEditar)) {
 
         let componenteSelecionado = regEx.Extraer.extraerCmpPorNom(contenidoEditar, nomCmp).join('')
         
-        if (regEx.Crear.campoSinDigito(nomCampo).test(contenidoArchivo)) {
+        if (regEx.Crear.campoSinDigito(nomCampo).test(contenidoEditar)) {
 
             let campoContenido = regEx.Extraer.extraerCampoContenido(componenteSelecionado, nomCampo).join('')
 
@@ -86,40 +89,42 @@ function remplazarCampoConCondicionContenidoCmp (archivo, condicionContenido, co
                 console.log(`--------------\nCampo editado: \"${nuevoCampo}\"`)
 
                 pcrArchivos.crearArchivo(
-                    'Testing\\'+ regEx.Borrar.clsRuta(archivo),
-                     remplazarContenido(contenidoArchivo, campoContenido, nuevoCampo)
+                    archivo,
+                    remplazarContenido(contenidoEditar, campoContenido, nuevoCampo)
                 )
 
             } else {
 
                 console.log(`--------------------------\nNo existe la expresion: \"${condicionContenido}\"`
                     + `\nEn el campo: \"${campoContenido}\" \nDel archivo: \"${regEx.Borrar.clsRuta(archivo)}\"`)
-                return contenidoArchivo
+                return contenidoEditar
             }
         } else {
 
             console.log(`No existe el campo: \"${nomCampo}\"`
                 + `\nEn el contenido del archivo: \"${regEx.Borrar.clsRuta(archivo)}\"`)
-            return contenidoArchivo
+            return contenidoEditar
         }
 
     } else {
 
         console.log(`No existe el componente: ${nomCmp}`
             + `\nEn el archivo: \"${regEx.Borrar.clsRuta(archivo)}\"`)
-        return contenidoArchivo
+        return contenidoEditar
     }
 }
 
 function ejecutarCondicion (archivo, condicionForzosa, condicionCampo, contenidoArchivo,
     nomCampo, nomCmp, nuevoContenidoCampo) {
-    console.log('\n-------------------------------------')
-    console.log('Determinacion Tipo: Nombre Componente - ',determinarStringOArreglo(condicionCampo))
-    console.log('-----------------------------')
 
     if (determinarStringOArreglo(condicionCampo) == 'string') {
-
-       
+        return remplazarCampoConCondicionContenidoCmp(
+            archivo,
+            condicionCampo,
+            nomCampo,
+            nomCmp,
+            nuevoContenidoCampo
+        )
     } else if (determinarStringOArreglo(condicionCampo) == 'arreglo') {
 
         console.log('\n-------------------------------------')
@@ -175,6 +180,7 @@ function ejecutarCondicion (archivo, condicionForzosa, condicionCampo, contenido
         return contenidoArchivo
     }
 }
+
 /***
  * Ejemlos:
  * denpendedor(
@@ -209,39 +215,24 @@ function denpendedor (archivo, conCondicion, condicionForzosa, condicionCampo,
 
     let contenidoArchivo = extraerContenidoRecodificado(archivo)
 
-    //-----------------------------------------------------------------
-    if (determinarStringOArreglo(nomCmp) == 'string') {
-        if (conCondicion == true) {
+    if (conCondicion == true) {
 
-            ejecutarCondicion(archivo, condicionForzosa, condicionCampo,
-                contenidoArchivo, nomCampo, nomCmp, nuevoContenidoCampo)
+        ejecutarCondicion(archivo, condicionForzosa, condicionCampo,
+            contenidoArchivo, nomCampo, nomCmp, nuevoContenidoCampo)
 
-        } else if (conCondicion == false) {
-            
-            console.log('Remplazo sin condicion')
-            return remplazarCampoSinCondicionContenidoCmp(
-                archivo,
-                contenidoArchivo,
-                nomCampo,
-                nomCmp,
-                nuevoContenidoCampo
-            )
-        } else {
-            console.log('Ingresa \"true\" si necesitas una condicion en el texto, \"false\" si no')
-            return contenidoArchivo
-        }
-    }else if (determinarStringOArreglo(nomCmp) == 'arreglo') {
-        console.log('\n-------------------------------------')
-        console.log('Determinacion Nombre Componente: ',determinarStringOArreglo(condicionCampo))
-        console.log('-----------------------------')
-
-        for (key in nomCmp) {
-            ejecutarCondicion(archivo, condicionForzosa, condicionCampo,
-                contenidoArchivo, nomCampo, nomCmp[key], nuevoContenidoCampo)
-        }
+    } else if (conCondicion == false) {
+        
+        console.log('Remplazo sin condicion')
+        // return remplazarCampoSinCondicionContenidoCmp(
+        //     archivo,
+        //     contenidoArchivo,
+        //     nomCampo,
+        //     nomCmp,
+        //     nuevoContenidoCampo
+        // )
     } else {
-            console.log('Objeto desconocido')
-            return contenidoArchivo
+        console.log('Ingresa \"true\" si necesitas una condicion en el texto, \"false\" si no')
+        return contenidoArchivo
     }
     //--------------------------------------------------------
 
