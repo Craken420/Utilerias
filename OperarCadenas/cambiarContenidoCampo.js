@@ -7,7 +7,7 @@ const regEx  = require('../RegEx/jsonRgx')
 const { remplazarContenido } = require('./remplazarContenido')
 
 
-function remplazarCampoConCondicionContenidoCmp (archivo, contenidoArchivo, condicionContenido,
+function remplazarCampoConCondicionContenidoCmp (contenidoArchivo, condicionContenido,
     nomCampo, nomCmp, nuevoContenidoCampo) {
 
    
@@ -17,10 +17,9 @@ function remplazarCampoConCondicionContenidoCmp (archivo, contenidoArchivo, cond
 
         console.log(`------------------------------------------------------------------\n`)
         console.log('***  Deteccion ***\n')
-        console.log(`Archivo: \"${regEx.Borrar.clsRuta(archivo)}\"`)
         console.log(`Componente: \"${nomCmp}\"`)
 
-        // console.log(`--------------------------------\nContenido:\n\"${componenteSelecionado}\"`)
+        console.log(`--------------------------------\nContenido:\n\"${componenteSelecionado}\"`)
 
         if (regEx.Crear.campoSinDigito(nomCampo).test(componenteSelecionado)) {
 
@@ -37,7 +36,7 @@ function remplazarCampoConCondicionContenidoCmp (archivo, contenidoArchivo, cond
                 console.log(`       --------------------------------`)
                 console.log(`            Campo editado: \"${nuevoCampo}\"`)
 
-                return remplazarContenido(contenidoArchivo, campoContenido, nuevoCampo)
+                return remplazarContenido(contenidoArchivo, componenteSelecionado, remplazarContenido(componenteSelecionado, campoContenido, nuevoCampo))
 
             } else {
 
@@ -53,8 +52,7 @@ function remplazarCampoConCondicionContenidoCmp (archivo, contenidoArchivo, cond
 
             console.log(`------------------------------------------------------------------`)
             console.log(`***  Omicion  ***`)
-            console.log(`No existe el campo: \"${nomCampo}\"`
-            + `\nEn el contenido del archivo: \"${regEx.Borrar.clsRuta(archivo)}\"`)
+            console.log(`No existe el campo: \"${nomCampo}\"`)
             console.log(`------------------------------------------------------------------`)
 
            return false
@@ -63,8 +61,7 @@ function remplazarCampoConCondicionContenidoCmp (archivo, contenidoArchivo, cond
     } else {
         console.log(`------------------------------------------------------------------`)
         console.log(`***  Omicion  ***`)
-        console.log(`No existe el componente: ${nomCmp}`
-        + `\nEn el archivo: \"${regEx.Borrar.clsRuta(archivo)}\"`)
+        console.log(`No existe el componente: ${nomCmp}`)
         console.log(`------------------------------------------------------------------`)
 
         return false
@@ -75,9 +72,9 @@ const operarCambio = (archivo, condicionCampo, nomCampo, nomCmp, nuevoContenidoC
 
         let contenidoArchivo = extraerContenidoRecodificado(archivo)
         contenidoArchivo = contenidoArchivo + '\n['
-
+        console.log(`------------------------------------------------------------------\n`)
+        console.log(`Archivo: \"${regEx.Borrar.clsRuta(archivo)}\"`)
         return remplazarCampoConCondicionContenidoCmp(
-            archivo,
             contenidoArchivo,
             condicionCampo,
             nomCampo,
@@ -85,4 +82,5 @@ const operarCambio = (archivo, condicionCampo, nomCampo, nomCmp, nuevoContenidoC
             nuevoContenidoCampo
         )
 }
+
 module.exports.operarCambio = operarCambio
