@@ -36,7 +36,17 @@ function remplazarCampoConCondicionContenidoCmp (contenidoArchivo, condicionCont
                 console.log(`       --------------------------------`)
                 console.log(`            Campo editado: \"${nuevoCampo}\"`)
 
-                return remplazarContenido(contenidoArchivo, componenteSelecionado, remplazarContenido(componenteSelecionado, campoContenido, nuevoCampo))
+                return regEx.Borrar.clsIniCorcheteLineaVacia(
+                    remplazarContenido(
+                        contenidoArchivo,
+                        componenteSelecionado,
+                        remplazarContenido(
+                            componenteSelecionado,
+                            campoContenido,
+                            nuevoCampo
+                        )
+                    )
+                )
 
             } else {
 
@@ -69,18 +79,18 @@ function remplazarCampoConCondicionContenidoCmp (contenidoArchivo, condicionCont
 }
 
 const operarCambio = (archivo, condicionCampo, nomCampo, nomCmp, nuevoContenidoCampo) => {
+    
+    let contenidoArchivo = extraerContenidoRecodificado(archivo)
+    contenidoArchivo = contenidoArchivo + '\n['
 
-        let contenidoArchivo = extraerContenidoRecodificado(archivo)
-        contenidoArchivo = contenidoArchivo + '\n['
-        console.log(`------------------------------------------------------------------\n`)
-        console.log(`Archivo: \"${regEx.Borrar.clsRuta(archivo)}\"`)
         return remplazarCampoConCondicionContenidoCmp(
-            contenidoArchivo,
-            condicionCampo,
-            nomCampo,
-            nomCmp,
-            nuevoContenidoCampo
-        )
+                contenidoArchivo,
+                condicionCampo,
+                nomCampo,
+                nomCmp,
+                nuevoContenidoCampo
+            )
+        
 }
 
 module.exports.operarCambio = operarCambio
