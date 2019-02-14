@@ -22,14 +22,14 @@ const rgxCrear = {
                                     + (rgxExpresiones.espaciosEntrePalabras1.ignoreCase ? 'i' : '')
                                     + (rgxExpresiones.espaciosEntrePalabras1.multiline ? 'm' : ''))},
 
-  campoSinDigito: tipoCampo => { return new RegExp(`^${tipoCampo}\\=.*`, `gim`)},
+  campoSinDigito: tipoCampo => { return new RegExp(`^${rgxPreparacion.prepararRegEx(tipoCampo)}\\=.*`, `gim`)},
 
-  campoConDigito: tipoCampo => { return  new RegExp(`^${tipoCampo}\\d{3}\\=.*`, `gim`)},
+  campoConDigito: tipoCampo => { return  new RegExp(`^${rgxPreparacion.prepararRegEx(tipoCampo)}\\d{3}\\=.*`, `gim`)},
 
-  campoConSinDigito: tipoCampo => { return  new RegExp(`^${tipoCampo}(\\d{3}|)\\=.*`,`gim`)},
+  campoConSinDigito: tipoCampo => { return  new RegExp(`^${rgxPreparacion.prepararRegEx(tipoCampo)}(\\d{3}|)\\=.*`,`gim`)},
 
   cmpDiffNomArchivo: nomCmt => { return new RegExp(
-      `\\[(?!\\w+;)(?!${nomCmt})(?=.*?\\/.*?\\])[^~]*?(?=(\\n|)^\\[)`,
+      `\\[(?!\\w+;)(?!${rgxPreparacion.prepararRegEx(nomCmt)})(?=.*?\\/.*?\\])[^~]*?(?=(\\n|)^\\[)`,
       `gim`
   )},
 
@@ -41,7 +41,7 @@ const rgxCrear = {
                                               )
                                           },
 
-  contenidoCampo: campo => { return new RegExp(`(?<=^${campo}\\=).*`, `gm`)},
+  contenidoCampo: campo => { return new RegExp(`(?<=^${rgxPreparacion.prepararRegEx(campo)}\\=).*`, `gm`)},
 
   deInicioAFin: (textoInicio, textoFin) => { return new RegExp (`${
                                               rgxPreparacion.prepararRegEx(
@@ -51,8 +51,8 @@ const rgxCrear = {
                                               ).replace(/\\s$/, '')}`, ``)
                                            },
 
-  extraerCmpPorNom: nomCmt => { return new RegExp(`^\\[(.*?|)${nomCmt}[^]*?(?=^\\[)`, `gim`)},
-  extraerCmp: nomCmt => { return new RegExp(`^\\[${nomCmt}\\][^]*?(?=^\\[)`, `gim`)},
+  extraerCmpPorNom: nomCmt => { return new RegExp(`^\\[(.*?|)${rgxPreparacion.prepararRegEx(nomCmt)}[^]*?(?=^\\[)`, `gim`)},
+  extraerCmp: nomCmt => { return new RegExp(`^\\[${rgxPreparacion.prepararRegEx(nomCmt)}\\][^]*?(?=^\\[)`, `gim`)},
   witchNolock: () => { return new RegExp(    rgxExpresiones.withNolock1.source
                                           +  rgxExpresiones.withNolock2.source,
                                             (rgxExpresiones.withNolock1.global ? 'g' : '')

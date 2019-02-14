@@ -1,6 +1,4 @@
 const { extraerContenidoRecodificado } = require('../Codificacion/contenidoRecodificado')
-const { operarCambio } = require('../OperarCadenas/cambiarContenidoCampo')
-const pcrArchivos = require('../OperadoresArchivos/procesadorArchivos')
 
 /*** Operadores de cadena ***/
 const regEx  = require('../RegEx/jsonRgx')
@@ -9,16 +7,21 @@ function extraerCmpLista (archivo) {
 
     let contenidoArchivo = extraerContenidoRecodificado(archivo)
 
-    if (regEx.Crear.campoSinDigito('ListaCarpetas').test(contenidoArchivo)) {
+    if (regEx.Crear.campoSinDigito('ListaCarpetas').test(
+            regEx.Extraer.extraerCmp(contenidoArchivo, 'Forma').join(''))
+        ) {
 
         let cmpLista = contenidoArchivo.match(regEx.Crear.campoSinDigito('ListaCarpetas')).join('').replace(/.*=/g, '')
 
-        if (/<BR>/g.test(cmpLista)) {
+        if (/\(lista\)$/gi.test(cmpLista) && /^\[Forma.ListaCarpetas\]$/gim.test(contenidoArchivo)) {
 
-            return cmpLista.split('<BR>')
+            return  regEx.Extraer.extraerCmp(
+                        contenidoArchivo, 'Forma.ListaCarpetas'
+                    ).join('').match(/(?<=\=)(?!\(fin\)).*/gi)
+
         } else {
 
-            return cmpLista.split('\r')
+            return cmpLista.split('<BR>')
         }
     }
 }
