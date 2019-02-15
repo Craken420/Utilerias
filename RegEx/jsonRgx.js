@@ -142,7 +142,7 @@ const rgxExpresiones = {
 
   campoConsecutivoIntls: /^\w+\d{3}/m, //=> Campo002, SQL002
 
-  componentesIntls: /\[[\W\w]*(?=^\[)|\[[^]*$/gm, //=> [Componente] contenidoComponente [
+  componentesIntls: /\[[\W\w]*?(?=^\[)/gm, //=> [Componente] contenidoComponente [
 
   campoIntlsYcontinua: /^.*?\=<CONTINUA>|<CONTINUA>/gm, //=> SQL002=<CONTINUA>algo
 

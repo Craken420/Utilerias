@@ -25,3 +25,48 @@ exports.remplazarContenido =  ( contenidoOriginal, contenidoARemplazar,
         )}`, ``), contenidoParaRemplazo)
     }
 }
+
+const remplazarContenidoUnido =  ( contenidoOriginal, contenidoARemplazar,
+    contenidoParaRemplazo) => {
+        if(contenidoARemplazar.split('\r\n').length == 1) {
+            if (/.{100}/.test(contenidoARemplazar)){
+                console.log('contenidoARemplazar solo tiene una linea mayor a 100 caracteres')
+            
+                let inicio = regEx.Preparar.prepararRegEx(contenidoARemplazar.match(/.{50}/).join(''))
+                let fin = regEx.Preparar.prepararRegEx(contenidoARemplazar.match(/.{50}$/m).join('')).replace(/(\\s)+(\\n)+$/,'')
+
+                return contenidoOriginal.replace(
+                    new RegExp(`${inicio}[^]*${fin}`, ``),
+                    contenidoParaRemplazo
+                )
+            } else {
+                console.log('contenidoARemplazar solo tiene una linea menor a 80 caracteres')
+                return  contenidoOriginal.replace(
+                    new RegExp(`${regEx.Preparar.prepararRegEx(
+                        contenidoARemplazar
+                    )}`, ``),
+                    contenidoParaRemplazo
+                )
+            }
+        } else if (contenidoARemplazar.split('\r\n').length <= 3) {
+            console.log('contenidoARemplazar menor a 3 lineas')
+            let primerasDosLineas = regEx.Extraer.extraerPrimeraLinea(contenidoARemplazar)
+            let ultimasDosLineas  = regEx.Extraer.extraerUltimaLinea(contenidoARemplazar)
+    
+            return  contenidoOriginal.replace(
+                        regEx.Crear.deInicioAFin(primerasDosLineas, ultimasDosLineas),
+                        contenidoParaRemplazo
+                    )
+        } else if (contenidoARemplazar.split('\r\n').length >= 4) {
+            console.log('contenidoARemplazar mayor o igual a 4 lineas')
+            let primerasDosLineas = regEx.Extraer.extraerPrimerasDosLineas(contenidoARemplazar)
+            let ultimasDosLineas  = regEx.Extraer.extraerUltimasDosLineas(contenidoARemplazar)
+    
+            return  contenidoOriginal.replace(
+                        regEx.Crear.deInicioAFin(primerasDosLineas, ultimasDosLineas),
+                        contenidoParaRemplazo
+                    )
+        }
+}
+
+module.exports.remplazarContenidoUnido = remplazarContenidoUnido

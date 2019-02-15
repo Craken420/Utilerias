@@ -10,7 +10,7 @@ const stat          = promisify(fs.stat)
  * validando si es directorio para solo arrojar archivos
  * @carpeta ruta del directorio a examinar
  ***/
-exports.obtenerArchivos = async carpeta => {
+const obtenerArchivos = async carpeta => {
   const subCarpetas = await leerCarpeta(carpeta)
   
   const archivos   = await Promise.all(subCarpetas.map( async subCarpetas => {
@@ -23,6 +23,8 @@ exports.obtenerArchivos = async carpeta => {
   }))
   return archivos.reduce((a, f) => a.concat(f), [])
 }
+
+module.exports.obtenerArchivos = obtenerArchivos
 
 /* Uso:
  * obtenerArchivos(carpetas)
