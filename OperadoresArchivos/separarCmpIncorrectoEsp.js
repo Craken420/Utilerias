@@ -1,6 +1,6 @@
 /*** Operadores de archivos ***/
 const { crearNombreNomenclaturaArchivoEsp } = require('./crearNomenclatura_MaviEsp')
-const { eliminarArchivoVacio } = require('./liminarArchivoVacio')
+const { eliminarArchivoVacio } = require('./eliminarArchivoVacio')
 const { eliminarArchivoVacioYCmpIncorrecto } = require('./eliminarCmpYArchivoVacio')
 const { crearNomExtensionTipoEsp } = require('./crearNomExtensionTipoEsp')
 const pcrArchivos = require('./procesadorArchivos')
@@ -22,11 +22,11 @@ const regEx       = require('../RegEx/jsonRgx')
 const crearNomenclaturaYArchivoOAdd = (expresion, texto) => {
     let txtCmpDiffNomArchivo = texto.match(expresion).join('\n') + '\n['
 
-    if (regEx.expresiones.nomExtCmp.test(txtCmpDiffNomArchivo)) {
+    if (regEx.Expresiones.nomExtCmp.test(txtCmpDiffNomArchivo)) {
 
         let arrNomExtCmpSinDuplx =  pcrArreglo.arregloSinDuplicado(
                                         txtCmpDiffNomArchivo.match(
-                                            regEx.expresiones.nomExtCmp
+                                            regEx.Expresiones.nomExtCmp
                                         )
                                     )
 
@@ -37,17 +37,17 @@ const crearNomenclaturaYArchivoOAdd = (expresion, texto) => {
         for (nomExtCmp in arrNomExtCmpSinDuplx) {
 
             let txtFinal =  txtCmpDiffNomArchivo.match(
-                regEx.crearRegEx.extraerCmpPorNom(arrNomExtCmpSinDuplx[ nomExtCmp ])
+                regEx.Crear.extraerCmpPorNom(arrNomExtCmpSinDuplx[ nomExtCmp ])
             ).join('\n')
 
-            txtFinal = regEx.jsonReplace.addEspacioCmp(
-                regEx.jsonReplace.clsIniCorcheteVacio(
-                    regEx.jsonReplace.clsSaltoLineaVacio(txtFinal)
+            txtFinal = regEx.Agregar.addEspacioCmp(
+                regEx.Borrar.clsIniCorcheteLineaVacia(
+                    regEx.Borrar.clsSaltoLineaVacio(txtFinal)
                 )
             )
 
             pcrArchivos.agregarArchivo(
-                'ArchivosOriginales\\' + nombresArchivos[nomExtCmp],
+                'Testing\\' + nombresArchivos[nomExtCmp],
                 '\n' + txtFinal
             )
         }
@@ -71,9 +71,9 @@ exports.crearArchivoCmpAddCmpArchivo = (archivo, texto) => {
 
     texto = texto + '\n['
     let textoBorrar = texto
-    texto = regEx.jsonReplace.clsComentariosIntls(texto)
+    texto = regEx.Borrar.clsComentariosIntls(texto)
 
-    let rgxExtraerCmpDiffNomArchivo = regEx.crearRegEx.cmpDiffNomArchivo(
+    let rgxExtraerCmpDiffNomArchivo = regEx.Crear.cmpDiffNomArchivo(
                         crearNomExtensionTipoEsp(archivo)
                     )
 

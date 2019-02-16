@@ -7,9 +7,9 @@ const regEx       = require('../RegEx/jsonRgx')
  * @archivo ruta del archivo
  ***/
 exports.crearNomExtensionTipoEsp = archivo => {
-    return  regEx.jsonReplace.minusculasPorMayuscula(
-                regEx.jsonReplace.puntoPorGuionBajoTipoEsp(
-                    regEx.jsonReplace.extraerNomTipoEsp(archivo)
+    return  regEx.Remplazar.minusculasPorMayuscula(
+                regEx.Remplazar.puntoPorGuionBajoTipoEsp(
+                    regEx.Extraer.extraerNomTipoEsp(archivo)
                 )
             )
 }

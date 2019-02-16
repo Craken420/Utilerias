@@ -8,9 +8,9 @@ const regEx       = require('../RegEx/jsonRgx')
  ***/
 exports.crearNombreNomenclaturaArchivoEsp = arreglo => {
     return arreglo.map(x => {
-            x = x.replace(regEx.expresiones.puntoExtension, '_') + '_MAVI.esp'
+            x = x.replace(regEx.Expresiones.puntoExtension, '_') + '_MAVI.esp'
             x = x.replace(
-                regEx.expresiones.tipoEspEnNomenclatura,
+                regEx.Expresiones.tipoEspEnNomenclatura,
                 x => x.toUpperCase()
             )
             return x

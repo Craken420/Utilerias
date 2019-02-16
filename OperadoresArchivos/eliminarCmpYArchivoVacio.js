@@ -1,6 +1,7 @@
 /*** Operadores de cadena ***/
 const regEx       = require('../RegEx/jsonRgx')
 
+const { eliminarArchivoVacio } = require('./eliminarArchivoVacio')
 /***
  * Función para eliminar el componente incorrecto y validar si esta vacio
  * o solo con comentarios para eliminarlo
@@ -11,9 +12,9 @@ const regEx       = require('../RegEx/jsonRgx')
  ***/
 exports.eliminarArchivoVacioYCmpIncorrecto = (archivo, expresion, texto) => {
     texto = texto.replace(expresion, '')
-    texto = regEx.jsonReplace.clsIniCorcheteVacio(texto)
-    if(!/\w+/g.test(regEx.jsonReplace.clsComentariosIntls(texto))) {
-        eliminarArchivo.eliminarArchivoVacio(texto, archivo)
+    texto = regEx.Borrar.clsIniCorcheteLineaVacia(texto)
+    if(!/\w+/g.test(regEx.Borrar.clsComentariosIntls(texto))) {
+        eliminarArchivoVacio(texto, archivo)
     }
 
     return texto
