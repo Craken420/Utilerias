@@ -5,7 +5,9 @@
  */
 
 const rgxAgregar ={
-  addEspacioCmp: texto => { return texto.replace(/^\[/gm, ' \n[')}
+  addEspacioCmp: texto => { return texto.replace(/^\[/gm, ' \n[')},
+  addTabContenidoCmp:   texto => { return texto.replace(rgxExpresiones.iniLineLetra, '\t')},
+
 }
 
 const rgxCrear = {
