@@ -1,17 +1,17 @@
 const fs = require('fs')
-const {jsonRegEx} = require('./jsonRgx')
-const {buscarDuplicado} = require('./eliminarDuplicado')
+const rgx = require('../RegEx/jsonRgx')
+const {buscarDuplicado} = require('../OperadorObjetos/eliminarDuplicado')
 
 exports.decode = (texto,ruta) => {
 	let objeto = {}
-	if(jsonRegEx.hasComponente.test(texto)) {
+	if(rgx.Expresiones.tituloComponente.test(texto)) {
 
-		let componentes = texto.match(jsonRegEx.inComponente)
+		let componentes = texto.match(rgx.Expresiones.componentesIntls)
 
 		componentes.forEach(componente => {
 
 			let componenteTitulo = componente.match(
-					jsonRegEx.hasComponente
+				rgx.Expresiones.tituloComponente
 				).join().replace('[','').replace(']','')
 
 			if(/^\w.*/gm.test(componente)) {
