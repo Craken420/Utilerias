@@ -3,7 +3,9 @@ const rgx = require('../RegEx/jsonRgx')
 const {buscarDuplicado} = require('../OperadorObjetos/eliminarDuplicado')
 
 exports.decode = (texto,ruta) => {
+
 	let objeto = {}
+
 	if(rgx.Expresiones.tituloComponente.test(texto)) {
 
 		let componentes = texto.match(rgx.Expresiones.componentesIntls)

@@ -9,8 +9,8 @@ const arregloCampos   = [
 ]
 
 const camposFrm = [
-    'CamposProrrateo', 
-    'ExcelColumnas',
+    //'CamposProrrateo', 
+    //'ExcelColumnas',
     'ListaCarpetas',
     'MovimientosValidos',
     'PlantillasExcepciones',
