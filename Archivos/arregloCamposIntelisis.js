@@ -1,11 +1,16 @@
 /*** Campos en los que se encuentra consecutivo ***/
 
+// const arregloCampos   = [
+//     'SQL','ListaAcciones','ListaEnCaptura', 'ListaCampos','Expresion','AyudaExpresionesForma',
+//     'ExpresionesAlMostrar','AntesExpresiones','ExpresionesAntes','ExpresionesAlCerrar',
+//     'Comentarios','FormaPreiva','FiltroGeneral','FiltroAbierto','Totalizadores1',
+//     'ActivoCondicion','EjecucionCondicion','CondicionEdicion','ActivoCondicion',
+//     'CondicionDespliege','ValorRefrescar','ValorPorOmision','Visible'
+// ]
+
 const arregloCampos   = [
-    'SQL','ListaAcciones','ListaEnCaptura', 'ListaCampos','Expresion','AyudaExpresionesForma',
+    'SQL','Expresion','AyudaExpresionesForma',
     'ExpresionesAlMostrar','AntesExpresiones','ExpresionesAntes','ExpresionesAlCerrar',
-    'Comentarios','FormaPreiva','FiltroGeneral','FiltroAbierto','Totalizadores1',
-    'ActivoCondicion','EjecucionCondicion','CondicionEdicion','ActivoCondicion',
-    'CondicionDespliege','ValorRefrescar','ValorPorOmision','Visible'
 ]
 
 const camposFrm = [

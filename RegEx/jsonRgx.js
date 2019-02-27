@@ -54,7 +54,8 @@ const rgxCrear = {
                                            },
 
   extraerCmpPorNom: nomCmt => { return new RegExp(`^\\[(.*?|)${rgxPreparacion.prepararRegEx(nomCmt)}[^]*?(?=^\\[)`, `gim`)},
-  extraerCmp: nomCmt => { return new RegExp(`^\\[${rgxPreparacion.prepararRegEx(nomCmt)}\\][^]*?(?=^\\[)`, `gim`)},
+  extraerCmp: nomCmp => { return new RegExp(`^\\[${rgxPreparacion.prepararRegEx(nomCmp)}\\][^]*?(?=^\\[)`, `gim`)},
+  titleCmpByName: nomCmp =>  { return new RegExp(`(?<=^\\[).*?${rgxPreparacion.prepararRegEx(nomCmp)}(?=\\])`, `m`)},
   witchNolock: () => { return new RegExp(    rgxExpresiones.withNolock1.source
                                           +  rgxExpresiones.withNolock2.source,
                                             (rgxExpresiones.withNolock1.global ? 'g' : '')
@@ -197,8 +198,8 @@ const rgxExpresiones = {
 
 const rgxExtractor = {
   extraerCampoContenido: (texto, campo) => {return texto.match(rgxCrear.campoSinDigito(campo))},
-
-  extraerCmpPorNom: (texto, nomCmp) => { return  texto.match(rgxCrear.extraerCmpPorNom(nomCmp))},
+  abductTitleCmpByName: (nameCmp, text) => {return text.match(rgxCrear.titleCmpByName(nameCmp))},
+  extraerCmpPorNom: (texto, nameCmp) => { return  texto.match(rgxCrear.extraerCmpPorNom(nameCmp))},
   extraerCmp: (texto, nomCmp) => { return  texto.match(rgxCrear.extraerCmp(nomCmp))},
   extraerNomTipoEsp: ruta  => { return ruta.replace(rgxExpresiones.nomYtipoEsp, '')},
 

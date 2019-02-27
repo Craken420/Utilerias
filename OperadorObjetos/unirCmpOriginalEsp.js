@@ -9,7 +9,7 @@ exports.unirOriginalSobrEscritura = (objDominador, objDenominador) => {
   
         if (objDenominador[key] != undefined) {
             let propiedadObj = Object.getOwnPropertyNames(objDenominador[key])
-
+            // console.log(propiedadObj)
             for (key2 in propiedadObj) {
                 objDominador[key][ propiedadObj[key2] ] = objDenominador[key][ propiedadObj[key2] ]
             }
