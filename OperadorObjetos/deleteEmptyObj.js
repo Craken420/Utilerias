@@ -15,7 +15,6 @@ function deleteObjEmpty (obj) {
         if (objIsEmpty(obj[key])) {
             delete obj[key]
         }
-
     }
 
     return obj

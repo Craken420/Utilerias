@@ -1,8 +1,6 @@
-const fs = require('fs')
 const rgx = require('../RegEx/jsonRgx')
-const {buscarDuplicado} = require('../OperadorObjetos/eliminarDuplicado')
 
-exports.decode = (texto,ruta) => {
+exports.decode = (texto) => {
 	let objeto = {}
 	if(rgx.Expresiones.tituloComponente.test(texto)) {
 
@@ -15,14 +13,6 @@ exports.decode = (texto,ruta) => {
 				).join().replace('[','').replace(']','')
 
 			if(/^\w.*/gm.test(componente)) {
-
-				if(objeto[componenteTitulo] != undefined) {
-				
-					fs.appendFileSync('log.txt',`Funcional:
-						el componente: ${componenteTitulo}
-						esta repetido en al archivo: ${ruta}\n`
-					)
-				}
 
 				objeto[componenteTitulo] = {}
 
@@ -43,24 +33,11 @@ exports.decode = (texto,ruta) => {
 					if(objeto[componenteTitulo][campo] == undefined) {
 
 						objeto[componenteTitulo][campo] = valor.trim()
-					} else {
-						fs.appendFileSync('log.txt',`Funcional: el campo: 
-							${campo} esta repetido en el componete 
-							${componenteTitulo} del archivo: ${ruta}\n`
-						)
-					}
+					} 
 					// si se repite un campo en un mismmo comonente debe de tomar el primero
 				})
-			} else {
-				fs.appendFileSync('log.txt',`Funcional: el componente:
-					${componenteTitulo} esta vacio en al archivo: ${ruta}\n`
-				)
-				// Si el componete esta vasio, intelisis lo ignora
 			}
 		})
-	} else {
-		fs.appendFileSync('log.txt',`Funcional: el archivo: ${ruta} no tiene componentes\n`)
-		// archivo vacio
 	}
 
 	return objeto

@@ -1,20 +1,46 @@
 /*** Campos en los que se encuentra consecutivo ***/
 
+const arregloCampos   = [ 
+    'SQL',
+    'Expresion',
+    'AyudaExpresionesForma',
+    'ExpresionesAlMostrar',
+    'AntesExpresiones',
+    'ExpresionesAntes',
+    'ExpresionesAlCerrar',
+    'Comentarios',
+    'FormaPreiva',
+    'FiltroGeneral',
+    'FiltroAbierto',
+    'Totalizadores1',
+    'ActivoCondicion',
+    'EjecucionCondicion',
+    'CondicionEdicion',
+    'CondicionDespliege',
+    'ValorRefrescar',
+    'ValorPorOmision',
+    'Visible',
+    'Expresiones',
+    'ExpAntesRefrescar',
+    'Totalizadores',
+    'ValidacionMensajeError',
+    'ValidacionCondicion',
+    'VisibleCondicion',
+    'CondicionVisible',
+    'AlCambiar',
+    'ListaParametros1',
+    'SQL.Cambios',
+    'AyudaOpcionesArticulo',
+    'Singular' 
+]
 // const arregloCampos   = [
-//     'SQL','ListaAcciones','ListaEnCaptura', 'ListaCampos','Expresion','AyudaExpresionesForma',
+//     'TipoAccion', 'ClaveAccion', 'FormaPrevia', 'AyudaForma','AyudaVista',
+//     'SQL','Expresion',
 //     'ExpresionesAlMostrar','AntesExpresiones','ExpresionesAntes','ExpresionesAlCerrar',
-//     'Comentarios','FormaPreiva','FiltroGeneral','FiltroAbierto','Totalizadores1',
-//     'ActivoCondicion','EjecucionCondicion','CondicionEdicion','ActivoCondicion',
-//     'CondicionDespliege','ValorRefrescar','ValorPorOmision','Visible'
 // ]
 
-const arregloCampos   = [
-    'SQL','Expresion','AyudaExpresionesForma',
-    'ExpresionesAlMostrar','AntesExpresiones','ExpresionesAntes','ExpresionesAlCerrar',
-]
-
 const camposFrm = [
-    'CamposProrrateo', 
+    'CamposProrrateo',
     'ExcelColumnas',
     'ListaCarpetas',
     'MovimientosValidos',

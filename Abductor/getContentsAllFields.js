@@ -1,17 +1,18 @@
 const { applyRules } = require('../Reglas/applyRules')
 const { deleteObjEmpty } = require('../OperadorObjetos/deleteEmptyObj')
-function getContentsAllFields (field, obj) {
 
+function getContentsAllFields (field, obj) {
+    let objReturn = obj
     let content = ''
 
-    for (key in obj) {
+    for (key in objReturn) {
 
-        if ( obj[key][field] ) {
+        if ( objReturn[key][field] ) {
 
-            let objSend = obj[key]
+            let objSend = objReturn[key]
 
             if ( applyRules(field, objSend) ) {
-                content += obj[key][field] + '\n'
+                content += objReturn[key][field] + '\n'
             }
         }
     }
@@ -22,20 +23,18 @@ function getContentsAllFields (field, obj) {
 }
 
 function getFields (fields, obj) {
-
+    //Aplicar las reglas para mandar los cambios que si aplican
     for (key in obj) {
 
         for (key2 in obj[key]) {
 
-            if (!new RegExp(`\b${fields.join('|')}\b`, ``).test(key2)) {
+            if (!new RegExp(`^\\b(${fields.join('|')})\\b`, `m`).test(key2)) {
                 delete obj[key][key2]
             }
         }
-
     }
 
-    obj = deleteObjEmpty(obj)
-    return obj
+    return deleteObjEmpty(obj)
 }
 
 module.exports.getContentsAllFields = getContentsAllFields

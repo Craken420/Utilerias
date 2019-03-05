@@ -63,3 +63,25 @@ module.exports.funcion = funcion
 // Retorna el nombre de los parámetros:
 
 // console.log(funcion.getParameterNames(function myFunction(a, b, c){}))// que retorna "[a, b, c]"
+ 
+/*** 
+ * Example:
+    let verifys = function verifyCombinations(array, unique) {
+        return (function(){
+            'use strict';
+            return main(array, unique);
+            function main(array) {
+                console.log('array')
+                
+                
+            }
+        })();
+    }
+
+    console.log(funcion.getParameterNames(verifys))
+ * 
+ * 
+ * 
+ * 
+ * 
+ ***/ 
