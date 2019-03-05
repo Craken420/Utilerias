@@ -10,6 +10,7 @@ const regEx = require('../RegEx/jsonRgx')
  ***/
 exports.remplazarContenido =  ( contenidoOriginal, contenidoARemplazar,
                                 contenidoParaRemplazo) => {
+<<<<<<< HEAD
   
     if (/(.*?\n){4,}/.test(contenidoARemplazar)) {
         let primerasDosLineas = regEx.Extraer.extraerPrimerasDosLineas(contenidoARemplazar)
@@ -70,3 +71,12 @@ const remplazarContenidoUnido =  ( contenidoOriginal, contenidoARemplazar,
 }
 
 module.exports.remplazarContenidoUnido = remplazarContenidoUnido
+=======
+    return  contenidoOriginal.replace(
+                new RegExp (
+                    `${regEx.jsonReplace.prepararRegEx(contenidoARemplazar)}`, `g`
+                    ),
+                contenidoParaRemplazo
+            )
+}
+>>>>>>> 30ea7c696a9f3c27e6a1a0b72d1da725c9bf7b62
