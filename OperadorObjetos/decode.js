@@ -1,7 +1,13 @@
 const rgx = require('../RegEx/jsonRgx')
 
+<<<<<<< HEAD
 exports.decode = (texto) => {
+=======
+exports.decode = (texto,ruta) => {
+
+>>>>>>> 7b1c8dba0fe35c78971e5d8c1d692e604533616d
 	let objeto = {}
+
 	if(rgx.Expresiones.tituloComponente.test(texto)) {
 
 		let componentes = texto.match(rgx.Expresiones.componentesIntls)

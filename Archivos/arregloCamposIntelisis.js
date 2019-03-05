@@ -40,8 +40,13 @@ const arregloCampos   = [
 // ]
 
 const camposFrm = [
+<<<<<<< HEAD
     'CamposProrrateo',
     'ExcelColumnas',
+=======
+    //'CamposProrrateo', 
+    //'ExcelColumnas',
+>>>>>>> 7b1c8dba0fe35c78971e5d8c1d692e604533616d
     'ListaCarpetas',
     'MovimientosValidos',
     'PlantillasExcepciones',
