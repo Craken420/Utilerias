@@ -27,9 +27,11 @@ function getFields (fields, obj) {
     for (key in obj) {
 
         for (key2 in obj[key]) {
-
-            if (!new RegExp(`^\\b(${fields.join('|')})\\b`, `m`).test(key2)) {
-                delete obj[key][key2]
+            // console.log(key2)
+            if (fields.length != 0){
+                if (!new RegExp(`^\\b(${fields.join('|')})\\b`, `m`).test(key2)) {
+                    delete obj[key][key2]
+                }
             }
         }
     }

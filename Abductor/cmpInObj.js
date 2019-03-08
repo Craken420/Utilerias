@@ -60,9 +60,12 @@ const cmpInObj =  function (nameCmp, content) {
     let nameCmpRgx = new RegExp (`(?<=^\\[)(.*?${nameCmp}|${nameCmp})(?=\\])`,`gm`)
 
     if (nameCmpRgx.test(content)) {
-        let fullNameCmp = content.match(nameCmpRgx).join('')
+        
+        let fullNameCmp = content.match(nameCmpRgx)
 
-        return obj[fullNameCmp]
+        if (fullNameCmp.length =! 0) {
+            return obj[fullNameCmp.join('')]
+        }
     }
 }
 

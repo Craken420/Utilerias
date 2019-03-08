@@ -10,7 +10,6 @@ const regEx = require('../RegEx/jsonRgx')
  ***/
 exports.remplazarContenido =  ( contenidoOriginal, contenidoARemplazar,
                                 contenidoParaRemplazo) => {
-<<<<<<< HEAD
   
     if (/(.*?\n){4,}/.test(contenidoARemplazar)) {
         let primerasDosLineas = regEx.Extraer.extraerPrimerasDosLineas(contenidoARemplazar)
@@ -32,14 +31,16 @@ const remplazarContenidoUnido =  ( contenidoOriginal, contenidoARemplazar,
         if(contenidoARemplazar.split('\r\n').length == 1) {
             if (/.{100}/.test(contenidoARemplazar)){
                // console.log('contenidoARemplazar solo tiene una linea mayor a 100 caracteres')
-            
-                let inicio = regEx.Preparar.prepararRegEx(contenidoARemplazar.match(/.{50}/).join(''))
-                let fin = regEx.Preparar.prepararRegEx(contenidoARemplazar.match(/.{50}$/m).join('')).replace(/(\\s)+(\\n)+$/,'')
+                if (/.{50}/.test(contenidoARemplazar) && /.{50}$/g.test(contenidoARemplazar)) {
 
-                return contenidoOriginal.replace(
-                    new RegExp(`${inicio}[^]*${fin}`, ``),
-                    contenidoParaRemplazo
-                )
+                    let inicio = regEx.Preparar.prepararRegEx(contenidoARemplazar.match(/.{50}/).join(''))
+                    let fin = regEx.Preparar.prepararRegEx(contenidoARemplazar.match(/.{50}$/m).join('')).replace(/(\\s)+(\\n)+$/,'')
+
+                    return contenidoOriginal.replace(
+                        new RegExp(`${inicio}[^]*${fin}`, ``),
+                        contenidoParaRemplazo
+                    )
+                }
             } else {
                 //console.log('contenidoARemplazar solo tiene una linea menor a 80 caracteres')
                 return  contenidoOriginal.replace(
@@ -71,12 +72,3 @@ const remplazarContenidoUnido =  ( contenidoOriginal, contenidoARemplazar,
 }
 
 module.exports.remplazarContenidoUnido = remplazarContenidoUnido
-=======
-    return  contenidoOriginal.replace(
-                new RegExp (
-                    `${regEx.jsonReplace.prepararRegEx(contenidoARemplazar)}`, `g`
-                    ),
-                contenidoParaRemplazo
-            )
-}
->>>>>>> 30ea7c696a9f3c27e6a1a0b72d1da725c9bf7b62

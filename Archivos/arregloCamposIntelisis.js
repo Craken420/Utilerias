@@ -4,6 +4,8 @@ const arregloCampos   = [
     'SQL',
     'Expresion',
     'AyudaExpresionesForma',
+    'Formula',
+    'FormulaSQL',
     'ExpresionesAlMostrar',
     'AntesExpresiones',
     'ExpresionesAntes',
@@ -31,7 +33,8 @@ const arregloCampos   = [
     'ListaParametros1',
     'SQL.Cambios',
     'AyudaOpcionesArticulo',
-    'Singular' 
+    'Singular',
+    'Vista'
 ]
 // const arregloCampos   = [
 //     'TipoAccion', 'ClaveAccion', 'FormaPrevia', 'AyudaForma','AyudaVista',
@@ -40,6 +43,7 @@ const arregloCampos   = [
 // ]
 
 const camposFrm = [
+    'Clave',
     'CamposProrrateo',
     'ExcelColumnas',
     'ListaCarpetas',

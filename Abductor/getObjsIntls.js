@@ -92,6 +92,7 @@ function getObjInClaveAccion (getObj, cmp, field) {
         }
     }
 }
+
 function gerVar (text) {
     let variables = []
 
@@ -110,6 +111,7 @@ function gerVar (text) {
         return variables.join(',')
     }
 }
+
 function getDlg (text) {
     if (/(?<=\bDialogo\b(|\s+)\((|\s+)<t>(|\s+))\w+(|[áñíóú]\w+)+(|(\.\w+(|[áñíóú]\w+))+)(?=(|\s+)<t>(|\s+)\))/gi.test(text)) {
         return text.match(/(?<=\bDialogo\b(|\s+)\((|\s+)<t>(|\s+))\w+(|[áñíóú]\w+)+(|(\.\w+(|[áñíóú]\w+))+)(?=(|\s+)<t>(|\s+)\))/gi).join(',')
@@ -119,7 +121,7 @@ function getDlg (text) {
 function getFormas (text) {
 
     let formas = []
-
+    // console.log(text)
     if (/(?<=\bOtraforma\b(\s+|)\((\s+|)<T>)[^]*?(?=<T>[^]*?\))/gi.test(text)) {
         text.match(/(?<=\bOtraforma\b(\s+|)\((\s+|)<T>)[^]*?(?=<T>[^]*?\))/gi).map(x => formas.push(x))
     }
@@ -127,9 +129,13 @@ function getFormas (text) {
     if (/(?<=\b(Actualizar|)Forma(|Modal)\b(\s+|)\((\s+|)<T>(\s+|))[^\s]*?(?=(\s+|)<T>(\s+|)\))/gi.test(text)) {
         text.match(/(?<=\b(Actualizar|)Forma(|Modal)\b(\s+|)\((\s+|)<T>(\s+|))[^\s]*?(?=(\s+|)<T>(\s+|)\))/gi).map(x => formas.push(x))
     }
-
+    // console.log('formas')
+    // console.log(formas)
     if (formas.length != 0) {
+       
         return formas.join(',')
+    } else {
+        return false
     }
 }
 
@@ -260,36 +266,20 @@ function verifiReturn (frm, rep, tbl, vis) {
     }
 }
 
-
-//Retornar un arreglo
-//Aqui se extraeran los objIntls que se encuentran en expresiones
-//Se piensa que los objetos que se encuentran en campos como tipoAccion=Forma
-//clave accion= frm se obtendran fuera
-
 function getObjsIntls(text) {
 
     let dlg = getDlg(text)
     let frm = getFormas(text)
     let plugin = getPlugIn(text)
     let rep = getRep(text)
-    let tbl = getTbls (text)
+    let tbl = getTbls(text)
     let vis = getVista(text)
     let variables = gerVar(text)
 
-    return verify({dlg, frm, plugin, rep, tbl, variables, vis})
-    // if ( verifiReturn() ) {
-    //     return verifiReturn(frm, rep, tbl, vis)
-    // }
-    
-    //let array = []
-   
-    // console.log(obj)
-    // getFrm(obj)
-    // console.log(obj)
-    // if (getFrm(returnObj)) {
-    //     // console.log(getFrm(obj))
-    //     return getFrm(returnObj)
-    // }
+    if (JSON.stringify(verify({dlg, frm, plugin, rep, tbl, variables, vis})) != '{}'){
+        //console.log(verify({dlg, frm, plugin, rep, tbl, variables, vis}))
+        return verify({dlg, frm, plugin, rep, tbl, variables, vis})
+    }
 }
 
  module.exports.getObjsIntls = getObjsIntls

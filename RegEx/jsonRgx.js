@@ -55,6 +55,7 @@ const rgxCrear = {
 
   extraerCmpPorNom: nomCmt => { return new RegExp(`^\\[(.*?|)${rgxPreparacion.prepararRegEx(nomCmt)}[^]*?(?=^\\[)`, `gim`)},
   extraerCmp: nomCmp => { return new RegExp(`^\\[${rgxPreparacion.prepararRegEx(nomCmp)}\\][^]*?(?=^\\[)`, `gim`)},
+  inComponente: () => {return new RegExp(/^\[[\W\w]*?(?=(^\[|^$))/gm)},
   titleCmpByName: nomCmp =>  { return new RegExp(`(?<=^\\[).*?${rgxPreparacion.prepararRegEx(nomCmp)}(?=\\])`, `m`)},
   witchNolock: () => { return new RegExp(    rgxExpresiones.withNolock1.source
                                           +  rgxExpresiones.withNolock2.source,
@@ -187,7 +188,7 @@ const rgxExpresiones = {
 
   tabulador:  /\t/mg, //=> \t
 
-  tituloComponente: /^\[.*\]/gm, //=> [ActivoFijo.tbl/FechaEmision] btw
+  tituloComponente: /^\[[^]*?\]/gm, //=> [ActivoFijo.tbl/FechaEmision] btw
 
   tipoEspEnNomenclatura: /(?<=\_)\w+(?=\_)/gi, //=> _FRM_
 
@@ -203,9 +204,9 @@ const rgxExtractor = {
   extraerCmp: (texto, nomCmp) => { return  texto.match(rgxCrear.extraerCmp(nomCmp))},
   extraerNomTipoEsp: ruta  => { return ruta.replace(rgxExpresiones.nomYtipoEsp, '')},
 
-  extraerPrimerasDosLineas: texto => { return texto.match(/.*?\r\n.*?\r\n/).join('')},
+  extraerPrimerasDosLineas: texto => { if (/.*?\r\n.*?\r\n/.test(texto)) return texto.match(/.*?\r\n.*?\r\n/).join('')},
 
-  extraerPrimeraLinea: texto => { return texto.match(/.*/).join('')},
+  extraerPrimeraLinea: texto => { if (/.*/.test(texto)) return texto.match(/.*/).join('')},
 
   extraerUltimasDosLineas: texto => {
     let lineaFinal = texto.replace(/^\s\n/gm, '').split('\r\n')
